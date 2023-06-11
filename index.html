@@ -4,12 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>cwop.rest — An easy way to submit weather reports to CWOP</title>
+    <meta name="description" content="An easy way to submit weather reports to the Citizen's Weather Observer Program.">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/picocss/pico@v2.0.0-alpha1/css/pico.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/picocss/pico@v2.0.0-alpha1/css/pico.colors.min.css">
     <style>
       code, pre {
         color: var(--color);
       }
+
+      html[data-theme="light"] .red {
+        color: var(--pico-color-red-600);
+      }
+      html[data-theme="light"] .orange {
+        color: var(--pico-color-orange-600);
+      }
+      html[data-theme="light"] .pumpkin {
+        color: var(--pico-color-pumpkin-600);
+      }
+      html[data-theme="light"] .green {
+        color: var(--pico-color-green-600);
+      }
+      html[data-theme="light"] .jade {
+        color: var(--pico-color-jade-600);
+      }
+      html[data-theme="light"] .blue {
+        color: var(--pico-color-blue-600);
+      }
+      html[data-theme="light"] .indigo {
+        color: var(--pico-color-indigo-600);
+      }
+      html[data-theme="light"] .purple {
+        color: var(--pico-color-purple-600);
+      }
+      html[data-theme="light"] .slate {
+        color: var(--pico-color-slate-600);
+      }
+
+      html[data-theme="dark"] .red {
+        color: var(--pico-color-red-200);
+      }
+      html[data-theme="dark"] .orange {
+        color: var(--pico-color-orange-200);
+      }
+      html[data-theme="dark"] .pumpkin {
+        color: var(--pico-color-pumpkin-200);
+      }
+      html[data-theme="dark"] .green {
+        color: var(--pico-color-green-200);
+      }
+      html[data-theme="dark"] .jade {
+        color: var(--pico-color-jade-200);
+      }
+      html[data-theme="dark"] .blue {
+        color: var(--pico-color-blue-200);
+      }
+      html[data-theme="dark"] .indigo {
+        color: var(--pico-color-indigo-200);
+      }
+      html[data-theme="dark"] .purple {
+        color: var(--pico-color-purple-200);
+      }
+      html[data-theme="dark"] .slate {
+        color: var(--pico-color-slate-200);
+      }
+
     </style>
   </head>
   <body>
@@ -17,7 +76,7 @@
     <header class="container">
       <hgroup>
         <h1 style="font-size: 400%;">cwop.rest</h1>
-        <h2>An easy way to submit weather reports to the Citizen's Weather Observer Program.</h2>
+        <h2>An easy way to submit weather reports to the <a href="https://en.wikipedia.org/wiki/Citizen_Weather_Observer_Program" target="_blank" class="secondary">Citizen's Weather Observer Program</a>.</h2>
       </hgroup>
     </header>
 
@@ -32,19 +91,19 @@
         <p>
           <mark>
             <span>https://send.cwop.rest/</span><!--
-            -->?<span class="pico-color-red-600">id=CW0001</span><!--
-            -->&<span class="pico-color-orange-600">lat=38.892954</span><!--
-            -->&<span class="pico-color-pumpkin-600">long=-77.0328578</span><!--
-            -->&<span class="pico-color-green-600">time=<span class="timevalue">1672531200000</span></span><!--
-            -->&<span class="pico-color-jade-600">tempf=<span class="tempfvalue">73</span></span><!--
-            -->&<span class="pico-color-blue-600">windspeedmph=<span class="windspeedmphvalue">1.5</span></span><!--
-            -->&<span class="pico-color-indigo-600">windgustmph=<span class="windgustmphvalue">2.7</span></span><!--
-            -->&<span class="pico-color-purple-600">winddir=<span class="winddirvalue">270</span></span><!--
-            -->&<span class="pico-color-slate-600">baromin=<span class="barominvalue">980.0</span></span><!--
-            -->&<span class="pico-color-red-600">humidity=<span class="humidityvalue">42</span></span><!--
-            -->&<span class="pico-color-orange-600">solarradiation=<span class="solarradiationvalue">170</span></span><!--
-            -->&<span class="pico-color-pumpkin-600">rainin=<span class="raininvalue">0</span></span><!--
-            -->&<span class="pico-color-green-600">dailyrainin=<span class="dailyraininvalue">1.5</span></span>
+            -->?<span class="red">id=CW0001</span><!--
+            -->&<span class="orange">lat=38.892954</span><!--
+            -->&<span class="pumpkin">long=-77.0328578</span><!--
+            -->&<span class="green">time=<span class="timevalue">1672531200000</span></span><!--
+            -->&<span class="jade">tempf=<span class="tempfvalue">73</span></span><!--
+            -->&<span class="blue">windspeedmph=<span class="windspeedmphvalue">1.5</span></span><!--
+            -->&<span class="indigo">windgustmph=<span class="windgustmphvalue">2.7</span></span><!--
+            -->&<span class="purple">winddir=<span class="winddirvalue">270</span></span><!--
+            -->&<span class="slate">baromin=<span class="barominvalue">980.0</span></span><!--
+            -->&<span class="red">humidity=<span class="humidityvalue">42</span></span><!--
+            -->&<span class="orange">solarradiation=<span class="solarradiationvalue">170</span></span><!--
+            -->&<span class="pumpkin">rainin=<span class="raininvalue">0</span></span><!--
+            -->&<span class="green">dailyrainin=<span class="dailyraininvalue">1.5</span></span>
           </mark>
         </p>
         
