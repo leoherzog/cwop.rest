@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/picocss/pico@v2.0.0-alpha1/css/pico.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/picocss/pico@v2.0.0-alpha1/css/pico.colors.min.css">
     <style>
       code, pre {
         color: var(--color);
@@ -24,28 +25,32 @@
 
       <article id="getting-started">
         <h2>Getting Started</h2>
-        <p>To submit your readings to CWOP, send an HTTP GET or POST request to <mark>send.cwop.rest</mark></p>
-        <p>For example:<br />
+        <p>To submit your current readings to CWOP, send an HTTP GET or POST request to <mark>send.cwop.rest</mark>.</p>
+        
+        <h3>GET</h3>
+        <p>For example, send a single GET request like so:</p>
+        <p>
           <mark>
             <span>https://send.cwop.rest/</span><!--
-            -->?<span style="color:maroon">id=CW0001</span><!--
-            -->&<span style="color:darkred">lat=38.892954</span><!--
-            -->&<span style="color:brown">long=-77.0328578</span><!--
-            -->&<span style="color:darkgreen">time=<span class="timevalue">1672531200000</span></span><!--
-            -->&<span style="color:darkblue">tempf=<span class="tempfvalue">73</span></span><!--
-            -->&<span style="color:purple">windspeedmph=<span class="windspeedmphvalue">1.5</span></span><!--
-            -->&<span style="color:indigo">windgustmph=<span class="windgustmphvalue">2.7</span></span><!--
-            -->&<span style="color:maroon">winddir=<span class="winddirvalue">270</span></span><!--
-            -->&<span style="color:darkred">baromin=<span class="barominvalue">980.0</span></span><!--
-            -->&<span style="color:brown">humidity=<span class="humidityvalue">42</span></span><!--
-            -->&<span style="color:darkgreen">solarradiation=<span class="solarradiationvalue">170</span></span><!--
-            -->&<span style="color:darkblue">rainin=<span class="raininvalue">0</span></span><!--
-            -->&<span style="color:purple">dailyrainin=<span class="dailyraininvalue">1.5</span></span>
+            -->?<span class="pico-color-red-600">id=CW0001</span><!--
+            -->&<span class="pico-color-orange-600">lat=38.892954</span><!--
+            -->&<span class="pico-color-pumpkin-600">long=-77.0328578</span><!--
+            -->&<span class="pico-color-green-600">time=<span class="timevalue">1672531200000</span></span><!--
+            -->&<span class="pico-color-jade-600">tempf=<span class="tempfvalue">73</span></span><!--
+            -->&<span class="pico-color-blue-600">windspeedmph=<span class="windspeedmphvalue">1.5</span></span><!--
+            -->&<span class="pico-color-indigo-600">windgustmph=<span class="windgustmphvalue">2.7</span></span><!--
+            -->&<span class="pico-color-purple-600">winddir=<span class="winddirvalue">270</span></span><!--
+            -->&<span class="pico-color-slate-600">baromin=<span class="barominvalue">980.0</span></span><!--
+            -->&<span class="pico-color-red-600">humidity=<span class="humidityvalue">42</span></span><!--
+            -->&<span class="pico-color-orange-600">solarradiation=<span class="solarradiationvalue">170</span></span><!--
+            -->&<span class="pico-color-pumpkin-600">rainin=<span class="raininvalue">0</span></span><!--
+            -->&<span class="pico-color-green-600">dailyrainin=<span class="dailyraininvalue">1.5</span></span>
           </mark>
         </p>
-        <p>
-          or POST a payload of
-          <pre>{
+        
+        <h3>POST</h3>
+        <p>Or, POST a request with the following body:</p>
+        <pre>{
   "id": "CW0001",
   "lat": 38.892954,
   "long": -77.0328578,
@@ -60,7 +65,7 @@
   "rainin": <span class="raininvalue">0</span>,
   "dailyrainin": <span class="dailyraininvalue">1.5</span>
 }</pre>
-        </p>
+
       </article>
 
       <article id="faq">
