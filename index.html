@@ -13,6 +13,10 @@
         color: var(--color);
       }
 
+      .secondary {
+        color: var(--pico-secondary);
+      }
+
       html[data-theme="light"] .red {
         color: var(--pico-color-red-600);
       }
@@ -119,19 +123,19 @@
         <h3>POST</h3>
         <p>Or, POST a request with the following body:</p>
         <pre>{
-  "id": "CW0001",
-  "lat": 38.892954,
-  "long": -77.0328578,
-  "time": <span class="timevalue">1672531200000</span>,
-  "tempf": <span class="tempfvalue">73</span>,
-  "windspeedmph": <span class="windspeedmphvalue">1.5</span>,
-  "windgustmph": <span class="windgustmphvalue">2.7</span>,
-  "winddir": <span class="winddirvalue">270</span>,
-  "baromin": <span class="barominvalue">980.0</span>,
-  "humidity": <span class="humidityvalue">42</span>,
-  "solarradiation": <span class="solarradiationvalue">170</span>,
-  "rainin": <span class="raininvalue">0</span>,
-  "dailyrainin": <span class="dailyraininvalue">1.5</span>
+  "id": "CW0001", <span class="secondary">// Required. <a href="https://madis.ncep.noaa.gov/cwop_signup.shtml" target="_blank" class="secondary">Your CWOP or Ham Radio ID</a></span>.
+  "lat": 38.892954, <span class="secondary">// Required. Your weather station's latitude in decimal degrees</span>
+  "long": -77.0328578, <span class="secondary">// Required. Your weather station's longitude in decimal degrees</span>
+  "time": <span class="timevalue">1672531200000</span>, <span class="secondary">// Required. The time of your weather reading in any <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date#several_ways_to_create_a_date_object" target="_blank" class="secondary">JavaScript Date parseable format</a></span>.
+  "tempf": <span class="tempfvalue">73</span>, <span class="secondary">// Required. The temperature in degrees fahrenheit</span>
+  "windspeedmph": <span class="windspeedmphvalue">1.5</span>, <span class="secondary">// Required. The wind speed in miles per hour</span>
+  "windgustmph": <span class="windgustmphvalue">2.7</span>, <span class="secondary">// Required. The wind gust in miles per hour</span>
+  "winddir": <span class="winddirvalue">270</span>, <span class="secondary">// Required. The direction that the wind is coming from, 0–359 degrees</span>
+  "baromin": <span class="barominvalue">980.0</span>, <span class="secondary">// Optional. The barometer pressure in Hectopascals/Millibars</span>
+  "humidity": <span class="humidityvalue">42</span>, <span class="secondary">// Optional. The relative humidity from 0 to 100 percent</span>
+  "solarradiation": <span class="solarradiationvalue">170</span>, <span class="secondary">// Optional. The solar radiation in W/m²</span>
+  "rainin": <span class="raininvalue">0</span>, <span class="secondary">// Optional. The amount of rain that fell the past hour in inches</span>
+  "dailyrainin": <span class="dailyraininvalue">1.5</span> <span class="secondary">// Optional. The amount of rain that fell the past 24 hours in inches</span>
 }</pre>
 
       </article>
