@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <style>
+      code, pre {
+        color: var(--color);
+      }
+    </style>
+  </head>
+  <body>
+
+    <header class="container">
+      <hgroup>
+        <h1 style="font-size: 400%;">cwop.rest</h1>
+        <h2>An easy way to submit weather reports to the Citizen's Weather Observer Program.</h2>
+      </hgroup>
+    </header>
+
+    <main class="container">
+
+      <article id="getting-started">
+        <h2>Getting Started</h2>
+        <p>To submit your readings to CWOP, send an HTTP GET or POST request to <mark>send.cwop.rest</mark></p>
+        <p>For example:<br />
+          <mark>
+            <span>https://send.cwop.rest/</span><!--
+            -->?<span style="color:maroon">id=CW0001</span><!--
+            -->&<span style="color:darkred">lat=38.892954</span><!--
+            -->&<span style="color:brown">long=-77.0328578</span><!--
+            -->&<span style="color:darkgreen">time=<span class="timevalue">1672531200000</span></span><!--
+            -->&<span style="color:darkblue">tempf=<span class="tempfvalue">73</span></span><!--
+            -->&<span style="color:purple">windspeedmph=<span class="windspeedmphvalue">1.5</span></span><!--
+            -->&<span style="color:indigo">windgustmph=<span class="windgustmphvalue">2.7</span></span><!--
+            -->&<span style="color:maroon">winddir=<span class="winddirvalue">270</span></span><!--
+            -->&<span style="color:darkred">baromin=<span class="barominvalue">980.0</span></span><!--
+            -->&<span style="color:brown">humidity=<span class="humidityvalue">42</span></span><!--
+            -->&<span style="color:darkgreen">solarradiation=<span class="solarradiationvalue">170</span></span><!--
+            -->&<span style="color:darkblue">rainin=<span class="raininvalue">0</span></span><!--
+            -->&<span style="color:purple">dailyrainin=<span class="dailyraininvalue">1.5</span></span>
+          </mark>
+        </p>
+        <p>
+          or POST a payload of
+          <pre>{
+  "id": "CW0001",
+  "lat": 38.892954,
+  "long": -77.0328578,
+  "time": <span class="timevalue">1672531200000</span>,
+  "tempf": <span class="tempfvalue">73</span>,
+  "windspeedmph": <span class="windspeedmphvalue">1.5</span>,
+  "windgustmph": <span class="windgustmphvalue">2.7</span>,
+  "winddir": <span class="winddirvalue">270</span>,
+  "baromin": <span class="barominvalue">980.0</span>,
+  "humidity": <span class="humidityvalue">42</span>,
+  "solarradiation": <span class="solarradiationvalue">170</span>,
+  "rainin": <span class="raininvalue">0</span>,
+  "dailyrainin": <span class="dailyraininvalue">1.5</span>
+}</pre>
+        </p>
+      </article>
+
+      <article id="faq">
+        
+        <details>
+          <summary>What is CWOP?</summary>
+
+          <blockquote>
+            <p>
+              Do you have a well-placed personal weather station at your home or business?
+              Would you like to share your data with the world?
+              You can if you send your data to the Citizen Weather Observing Program (CWOP)!
+            </p>
+            <p>
+              CWOP is a volunteer-based network that allows owners of personal weather stations to share their station’s live data with the National Weather Service, emergency managers, wild land fire fighters, and Universities worldwide.
+              There are several options to getting your data online — inexpensive (even free) software programs, and extremely reliable, energy-efficient 'internet devices.'
+              If you have a well-sited home weather station, and a broadband internet connection, you’re just a few steps away from contributing your data to CWOP.
+            </p>
+            <footer>
+              <cite>— <a href="https://www.weather.gov/cle/CWOP" target="_blank" class="secondary">https://www.weather.gov/cle/CWOP</a></cite>
+            </footer>
+          </blockquote>
+
+          <blockquote>
+            <p>
+              CWOP is a public-private partnership with three goals:
+            </p>
+            <ol>
+              <li>To collect weather data contributed by citizens.</li>
+              <li>To make these data available for weather services and homeland security.</li>
+              <li>To provide feedback to the data contributors so they have the tools to check and improve their data quality.</li>
+            </ol>
+            <p>
+              CWOP has been sending data to MADIS (the Meteorological Assimilation Data Ingest System) since MADIS started on July 1, 2001.
+            </p>
+            <footer>
+              <cite>— <a href="https://madis.ncep.noaa.gov/madis_cwop.shtml" target="_blank" class="secondary">https://madis.ncep.noaa.gov/madis_cwop.shtml</a></cite>
+            </footer>
+          </blockquote>
+
+        </details>
+
+        <details>
+          <summary>Why does cwop.rest exist?</summary>
+
+          <p>Submitting your weather station data to CWOP is a pain, technologically. 
+            Most weather station reporting services use a simple HTTP GET request to one URL with parameters to submit their data.
+            By requiring a direct TCP connection, it is difficult to submit your weather data to CWOP from many contexts.
+            This service allows you to submit from any device that can make an HTTP request.
+            Scattered about the official website are the instructions:
+          </p>
+          <blockquote>
+            <p>
+              Each TCP connection to port 14580 will begin with receiving at least one text line from the APRS server (terminated with cr/lf).
+              This line identifies the server software you just connected to which you can safely ignore.
+              A line is sent from the server upon connection and upon receiving that line, your client will send a login line.
+              Suppose your CWOP identifier is EW9876. Your login line would be:
+            </p>
+            <p>
+                user EW9876 pass -1 vers YourSoftwareName 1.0
+            </p>
+            <p>
+              The CWOP identifier is the user name, the passcode is -1 (minus one), and the software identifier is your software name (no spaces) followed by the version number (containing no spaces).
+              There is a single space between each keyword and each value.
+              Once that is entered (terminate with cr/lf), you will receive an acknowledgement line from the server and it can be safely ignored.
+              After receiving the login acknowledgement, the server is ready to take the single APRS "packet" with the weather data.
+              After the packet is sent, your client can safely disconnect from the server.
+              There will be no acknowledgement of the packet being received at the server (the acknowledgement is handled by the TCP underlying protocol).
+              The APRS "packet" is also terminated by cr/lf.
+              The APRS "packet" is a weather position packet with a very specific header:
+            </p>
+            <p>
+              EW9876>APRS,TCPIP*:rest of packet
+            </p>
+            <p>
+              The first "callsign" is the CWOP station identifier for that station as shown.
+              The next item is TCPIP followed by an asterisk.
+              All capital letters must be used for the packet header.
+              The rest of the packet follows the format specified...
+            </p>
+            <footer>
+              <cite>— <a href="http://wxqa.com/faq.html" target="_blank" class="secondary">http://wxqa.com/faq.html</a></cite>
+            </footer>
+          </blockquote>
+          <p>and</p>
+          <blockquote>
+            <p>
+              Use a server designator of "cwop.aprs.net" to send to servers (CWOP1, CWOP2, CWOP3, CWOP4) designated for CWOP non-ham use.
+              These servers do not require a validation code or password.
+            </p>
+            <p>
+              Use a server designator of "rotate.aprs.net" to send to the APRS Core servers (FIRST, SECOND, THIRD) or "rotate.aprs2.net" to send to the Tier 2 servers.
+              Note that these servers require a validation code which currently licensed amateur radio operators can obtain from cwop-support at noaa dot gov.
+            </p>
+            <p>
+              Use port 14580 first; but if that does not work, try port 23.
+            </p>
+            <footer>
+              <cite>— <a href="http://wxqa.com/servers2use.html" target="_blank" class="secondary">http://wxqa.com/servers2use.html</a></cite>
+            </footer>
+          </blockquote>
+
+        </details>
+        
+        <details>
+          <summary>How does cwop.rest work? How can I trust you?</summary>
+          <p>
+            This website, and the <mark>send.cwop.rest</mark> service, are open source and powered by Cloudflare Pages and Cloudflare Workers.
+            You are free to inspect the code, or copy it into your own Cloudflare Worker and run your own instance.
+          </p>
+          <a href="#" role="button" class="">See the Source Code</a>
+        </details>
+
+        <details>
+          <summary>I already have an APRS packet. Can I just submit it?</summary>
+          <p>
+            Sure! Instead of using parameters for each reading, just use a <code>packet</code> URL parameter or JSON key and we will send it along.
+          </p>
+        </details>
+
+        <details>
+          <summary>Accordion 2</summary>
+          <p>...</p>
+        </details>
+
+      </article>
+
+    </main>
+
+    <script>
+      function getRandomNumber(min, max, decimalPlaces) {
+        return Number(((Math.random() * (max - min)) + min).toFixed(decimalPlaces));
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        let time = new Date().getTime();
+        let tempf = getRandomNumber(0, 100, 0);
+        let windspeedmph = getRandomNumber(0, 10, 1);
+        let windgustmph = windspeedmph + getRandomNumber(0, 10, 0);
+        let winddir = getRandomNumber(0, 359, 0);
+        let baromin = getRandomNumber(970, 1050, 1); // "altimeter" (QNH) format in tenths of millibars
+        let humidity = getRandomNumber(10, 100, 0);
+        let solarradiation = getRandomNumber(0, 1000, 0);
+        let rainin = getRandomNumber(0, 1, 1);
+        let dailyrainin = getRandomNumber(0, 10, 1);
+
+        Array.from(document.getElementsByClassName('timevalue')).forEach(x => x.innerText = time);
+        Array.from(document.getElementsByClassName('tempfvalue')).forEach(x => x.innerText = tempf);
+        Array.from(document.getElementsByClassName('windspeedmphvalue')).forEach(x => x.innerText = windspeedmph);
+        Array.from(document.getElementsByClassName('windgustmphvalue')).forEach(x => x.innerText = windgustmph);
+        Array.from(document.getElementsByClassName('winddirvalue')).forEach(x => x.innerText = winddir);
+        Array.from(document.getElementsByClassName('barominvalue')).forEach(x => x.innerText = baromin);
+        Array.from(document.getElementsByClassName('humidityvalue')).forEach(x => x.innerText = humidity);
+        Array.from(document.getElementsByClassName('solarradiationvalue')).forEach(x => x.innerText = solarradiation);
+        Array.from(document.getElementsByClassName('raininvalue')).forEach(x => x.innerText = rainin);
+        Array.from(document.getElementsByClassName('dailyraininvalue')).forEach(x => x.innerText = dailyrainin);
+      });
+    </script>
+
+  </body>
+</html>
