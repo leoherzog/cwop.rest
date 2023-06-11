@@ -106,8 +106,8 @@
           <mark>
             <span>https://send.cwop.rest/</span><!--
             -->?<a style="text-decoration:none;" href="https://madis.ncep.noaa.gov/cwop_signup.shtml" target="_blank"><span class="red" style="cursor:pointer;" data-tooltip="Required. Your CWOP or Ham Radio ID. Click for more info.">id=CW0001</span></a><!--
-            -->&<span class="orange" data-tooltip="Required. Your weather station's latitude in decimal degrees">lat=38.892954</span><!--
-            -->&<span class="pumpkin" data-tooltip="Required. Your weather station's longitude in decimal degrees">long=&minus;&zwnj;77.0328578</span><!--
+            -->&<span class="orange" data-tooltip="Required. Your weather station's latitude in decimal degrees.">lat=38.892954</span><!--
+            -->&<span class="pumpkin" data-tooltip="Required. Your weather station's longitude in decimal degrees.">long=&minus;&zwnj;77.0328578</span><!--
             -->&<a style="text-decoration:none;" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date#several_ways_to_create_a_date_object" target="_blank"><span class="green" style="cursor:pointer;" data-tooltip="Required. The time of your weather reading in any JavaScript Date parseable format. Click for more info.">time=<span class="timevalue">1672531200000</span></span></a><!--
             -->&<span class="jade" data-tooltip="Required. The temperature in degrees fahrenheit.">tempf=<span class="tempfvalue">73</span></span><!--
             -->&<span class="blue" data-tooltip="Required. The wind speed in miles per hour.">windspeedmph=<span class="windspeedmphvalue">1.5</span></span><!--
@@ -145,6 +145,8 @@
         
         <details>
           <summary>What is CWOP?</summary>
+
+          <p>I'll let the National Weather Service explain:</p>
 
           <blockquote>
             <p>
@@ -187,7 +189,7 @@
           <summary>Why does this site in particular exist?</summary>
 
           <p>Submitting your weather station data to CWOP is a pain, technologically. 
-            Most weather station reporting services use a simple HTTP GET request to one URL with parameters to submit their data.
+            Most weather station reporting services use a simple HTTP GET request with URL parameters to submit data.
             By requiring a direct TCP connection, it is difficult to submit your weather data to CWOP from many contexts.
             This service allows you to submit from any device that can make an HTTP request.
           </p>
@@ -271,9 +273,27 @@
         <hr />
 
         <details>
-          <summary>I already have an APRS packet from my software. Can I just submit it?</summary>
+          <summary>I already have an APRS packet assembled from my software. Can I just submit it?</summary>
           <p>
-            Sure! Instead of using parameters for each reading, just use a <code>packet</code> URL parameter or JSON key and we will send it along.
+            Sure! Instead of using parameters for each reading, just use a <code>packet</code> URL parameter in your GET request or <code>packet</code> key in your JSON POST payload and we will send it along.
+          </p>
+        </details>
+
+        <hr />
+
+        <details>
+          <summary>What if I am using my Ham Radio callsign and have a validation code?</summary>
+          <p>
+            Just include a <code>validation</code> URL parameter in your GET request or <code>validation</code> key in your JSON POST payload and we will send your packet to the correct Ham-only CWOP server using your validation code.
+          </p>
+        </details>
+
+        <hr />
+
+        <details>
+          <summary>What if I want to submit to a custom CWOP server, such as the Tier 2 servers?</summary>
+          <p>
+            Just include a <code>server</code> URL parameter in your GET request or <code>server</code> key in your JSON POST payload and we will send your packet to your specified server instead of the defaults.
           </p>
         </details>
 
