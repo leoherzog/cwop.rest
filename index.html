@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -108,13 +108,17 @@
 
         </details>
 
+        <hr />
+
         <details>
-          <summary>Why does cwop.rest exist?</summary>
+          <summary>Why does this site in particular exist?</summary>
 
           <p>Submitting your weather station data to CWOP is a pain, technologically. 
             Most weather station reporting services use a simple HTTP GET request to one URL with parameters to submit their data.
             By requiring a direct TCP connection, it is difficult to submit your weather data to CWOP from many contexts.
             This service allows you to submit from any device that can make an HTTP request.
+          </p>
+          <p>
             Scattered about the official website are the instructions:
           </p>
           <blockquote>
@@ -167,8 +171,20 @@
               <cite>— <a href="http://wxqa.com/servers2use.html" target="_blank" class="secondary">http://wxqa.com/servers2use.html</a></cite>
             </footer>
           </blockquote>
+          <p>This website abstracts all of that out, so all you have to worry about is one HTTP request.</p>
 
         </details>
+
+        <hr />
+
+        <details>
+          <summary>Are you related to CWOP, Findu, or the NWS/NOAA?</summary>
+          <p>
+            Nope! This was a service I built for myself (to integrate into my <a href="https://github.com/leoherzog/WundergroundStationForwarder" target="_blank">Apps Script Weather Station Forwarder</a>), and I thought it might be useful to others.
+          </p>
+        </details>
+
+        <hr />
         
         <details>
           <summary>How does cwop.rest work? How can I trust you?</summary>
@@ -176,19 +192,16 @@
             This website, and the <mark>send.cwop.rest</mark> service, are open source and powered by Cloudflare Pages and Cloudflare Workers.
             You are free to inspect the code, or copy it into your own Cloudflare Worker and run your own instance.
           </p>
-          <a href="#" role="button" class="">See the Source Code</a>
+          <a href="https://github.com/leoherzog/cwop.rest" role="button" class="">See the Source Code</a>
         </details>
 
+        <hr />
+
         <details>
-          <summary>I already have an APRS packet. Can I just submit it?</summary>
+          <summary>I already have an APRS packet from my software. Can I just submit it?</summary>
           <p>
             Sure! Instead of using parameters for each reading, just use a <code>packet</code> URL parameter or JSON key and we will send it along.
           </p>
-        </details>
-
-        <details>
-          <summary>Accordion 2</summary>
-          <p>...</p>
         </details>
 
       </article>
