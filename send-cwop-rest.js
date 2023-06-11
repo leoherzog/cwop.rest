@@ -181,8 +181,8 @@ function buildPacket(observation) {
   if (humidity != null) {
     packet += 'h' + (humidity % 100).toString().padStart(2, '0');
   }
-  if (pressure != null) {
-    packet += 'b' + pressure.toString().padStart(5, '0');
+  if (pressure != null) { // "altimeter" (QNH) format, in tenths of millibars
+    packet += 'b' + (Math.round(pressure * 10)).toString().padStart(5, '0');
   }
   if (solarradiation != null) {
     if (solarradiation >= 1000) {
