@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,9 +9,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/picocss/pico@v2.0.0-alpha1/css/pico.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/picocss/pico@v2.0.0-alpha1/css/pico.colors.min.css">
     <style>
-      code, pre {
-        color: var(--color);
-      }
 
       html[data-theme="light"] .red {
         color: var(--pico-color-red-600);
@@ -72,6 +69,10 @@
     </style>
   </head>
   <body>
+
+    <div style="position:absolute;top:0px;left:8px;">
+      <span id="theme" style="font-size:16px" aria-label="Toggle light and dark mode">☀️</span>
+    </div>
 
     <header class="container">
       <hgroup>
@@ -273,6 +274,14 @@
       }
 
       document.addEventListener('DOMContentLoaded', function() {
+
+        document.documentElement.dataset.theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.getElementById('theme').innerText = document.documentElement.dataset.theme === 'dark' ? '☀️' : '🌙';
+        document.getElementById('theme').addEventListener('click', e => {
+          document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+          e.srcElement.innerText = document.documentElement.dataset.theme === 'dark' ? '☀️' : '🌙';
+        });
+
         let time = new Date().getTime();
         let tempf = getRandomNumber(0, 100, 0);
         let windspeedmph = getRandomNumber(0, 10, 1);
