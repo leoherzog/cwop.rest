@@ -260,9 +260,23 @@
         </details>
 
         <hr />
+
+        <details>
+          <summary>How do I see my CWOP report(s) once I start sending data?</summary>
+          <p>
+            Your reports will show up (with some delay) in several places:
+          </p>
+          <p>
+            <a href="https://findu.com/" target="_blank"><button>FindU</button></a>
+            <a href="https://aprs.fi/weather/" target="_blank"><button>APRS.fi</button></a>
+            <a href="https://madis.ncep.noaa.gov/" target="_blank"><button>Data Requests from the MADIS API</button></a>
+          </p>
+        </details>
+
+        <hr />
         
         <details>
-          <summary>How does cwop.rest work? How can I trust you?</summary>
+          <summary>How does send.cwop.rest work? How can I trust you?</summary>
           <p>
             This website, and the <mark>send.cwop.rest</mark> service, are open source and powered by Cloudflare Pages and Cloudflare Workers.
             You are free to inspect the code, or copy it into your own Cloudflare Worker and run your own instance.
@@ -291,7 +305,7 @@
         <hr />
 
         <details>
-          <summary>What if I want to submit to a custom CWOP server, such as the Tier 2 servers?</summary>
+          <summary>What if I want to submit to a custom CWOP server, such as the "Tier 2 servers" or one specific CWOP server?</summary>
           <p>
             Just include a <code>server</code> URL parameter in your GET request or <code>server</code> key in your JSON POST payload and we will send your packet to your specified server instead of the defaults.
           </p>
