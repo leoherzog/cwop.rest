@@ -1,0 +1,21 @@
+{
+  "name": "cwop.rest",
+  "short_name": "cwop.rest",
+  "description": "An easy way to submit weather reports to the Citizen's Weather Observer Program (CWOP). This service allows you to submit data from any device that can make an HTTP request.",
+  "icons": [
+    {
+      "src": "/path/to/icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/path/to/large-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000"
+}
