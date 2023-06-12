@@ -275,7 +275,7 @@ export async function sendPacket(packet, server, port, validationCode = '-1') {
 
   // Send login line
   const id = packet.split('>')[0];
-  const loginLine = 'user ' + id + ' pass ' + validationCode + ' vers cwop.rest 0.1\r\n';
+  const loginLine = 'user ' + id + ' pass ' + validationCode + ' vers cwop.rest 1.0\r\n';
   console.log('Sending to server: ', loginLine);
   let encoded = encoder.encode(loginLine);
   await writer.write(encoded);
