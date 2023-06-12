@@ -3,7 +3,17 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta property="og:url" content="https://cwop.rest">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="cwop.rest">
+    <meta property="og:description" content="An easy way to submit weather reports to the Citizen's Weather Observer Program.">
+    <meta property="og:image" content="https://cwop.rest/img/social.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="cwop.rest">
+    <meta property="twitter:url" content="https://cwop.rest">
+    <meta name="twitter:title" content="cwop.rest">
+    <meta name="twitter:description" content="An easy way to submit weather reports to the Citizen's Weather Observer Program.">
+    <meta name="twitter:image" content="https://cwop.rest/img/social.png">
     <title>cwop.rest — An easy way to submit weather reports to CWOP</title>
     <meta name="description" content="An easy way to submit weather reports to the Citizen's Weather Observer Program.">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/picocss/pico@v2.0.0-alpha1/css/pico.css">
@@ -350,6 +360,7 @@
         Array.from(document.getElementsByClassName('solarradiationvalue')).forEach(x => x.innerText = solarradiation);
         Array.from(document.getElementsByClassName('raininvalue')).forEach(x => x.innerText = rainin);
         Array.from(document.getElementsByClassName('dailyraininvalue')).forEach(x => x.innerText = dailyrainin);
+      
       });
     </script>
 
