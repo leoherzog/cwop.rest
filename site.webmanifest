@@ -1,7 +1,7 @@
 {
   "name": "cwop.rest",
   "short_name": "cwop.rest",
-  "description": "An easy way to submit weather reports to the Citizen's Weather Observer Program (CWOP). This service allows you to submit data from any device that can make an HTTP request.",
+  "description": "An easy way to submit weather reports to the NOAA Citizen's Weather Observer Program (CWOP). This service allows you to submit data from any device that can make an HTTP request.",
   "icons": [
     {
       "src": "https://cwop.rest/img/192.png",
