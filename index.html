@@ -30,59 +30,58 @@
         color: var(--pico-secondary);
       }
 
-      html[data-theme="light"] .red {
+      .pico-color-red-contrast {
         color: var(--pico-color-red-600);
       }
-      html[data-theme="light"] .orange {
-        color: var(--pico-color-orange-600);
-      }
-      html[data-theme="light"] .pumpkin {
-        color: var(--pico-color-pumpkin-600);
-      }
-      html[data-theme="light"] .green {
-        color: var(--pico-color-green-600);
-      }
-      html[data-theme="light"] .jade {
-        color: var(--pico-color-jade-600);
-      }
-      html[data-theme="light"] .blue {
-        color: var(--pico-color-blue-600);
-      }
-      html[data-theme="light"] .indigo {
-        color: var(--pico-color-indigo-600);
-      }
-      html[data-theme="light"] .purple {
-        color: var(--pico-color-purple-600);
-      }
-      html[data-theme="light"] .slate {
-        color: var(--pico-color-slate-600);
-      }
-
-      html[data-theme="dark"] .red {
+      [data-theme="dark"] .pico-color-red-contrast {
         color: var(--pico-color-red-200);
       }
-      html[data-theme="dark"] .orange {
+      .pico-color-orange-contrast {
+        color: var(--pico-color-orange-600);
+      }
+      [data-theme="dark"] .pico-color-orange-contrast {
         color: var(--pico-color-orange-200);
       }
-      html[data-theme="dark"] .pumpkin {
+      .pico-color-pumpkin-contrast {
+        color: var(--pico-color-pumpkin-600);
+      }
+      [data-theme="dark"] .pico-color-pumpkin-contrast {
         color: var(--pico-color-pumpkin-200);
       }
-      html[data-theme="dark"] .green {
+      .pico-color-green-contrast {
+        color: var(--pico-color-green-600);
+      }
+      [data-theme="dark"] .pico-color-green-contrast {
         color: var(--pico-color-green-200);
       }
-      html[data-theme="dark"] .jade {
+      .pico-color-jade-contrast {
+        color: var(--pico-color-jade-600);
+      }
+      [data-theme="dark"] .pico-color-jade-contrast {
         color: var(--pico-color-jade-200);
       }
-      html[data-theme="dark"] .blue {
+      .pico-color-blue-contrast {
+        color: var(--pico-color-blue-600);
+      }
+      [data-theme="dark"] .pico-color-blue-contrast {
         color: var(--pico-color-blue-200);
       }
-      html[data-theme="dark"] .indigo {
+      .pico-color-indigo-contrast {
+        color: var(--pico-color-indigo-600);
+      }
+      [data-theme="dark"] .pico-color-indigo-contrast {
         color: var(--pico-color-indigo-200);
       }
-      html[data-theme="dark"] .purple {
+      .pico-color-purple-contrast {
+        color: var(--pico-color-purple-600);
+      }
+      [data-theme="dark"] .pico-color-purple-contrast {
         color: var(--pico-color-purple-200);
       }
-      html[data-theme="dark"] .slate {
+      .pico-color-slate-contrast {
+        color: var(--pico-color-slate-600);
+      }
+      [data-theme="dark"] .pico-color-slate-contrast {
         color: var(--pico-color-slate-200);
       }
     </style>
@@ -121,19 +120,19 @@
         <p>
           <mark><!--
             --><span>https://send.cwop.rest/</span><!--
-            -->?<a style="text-decoration:none;" href="https://madis.ncep.noaa.gov/cwop_signup.shtml" target="_blank"><span class="red" style="cursor:pointer;" data-tooltip="Required. Your CWOP or Ham Radio ID. Click for more info.">id=CW0001</span></a><!--
-            -->&<span class="orange" data-tooltip="Required. Your weather station's latitude in decimal degrees.">lat=38.892954</span><!--
-            -->&<span class="pumpkin" data-tooltip="Required. Your weather station's longitude in decimal degrees.">long=&minus;&zwnj;77.0328578</span><!--
-            -->&<span class="green" data-tooltip=" Required. The time that your weather reading was taken in ISO Date or Epoch (milliseconds) format.">time=<span class="timevalue">1672531200000</span></span><!--
-            -->&<span class="jade" data-tooltip="Required. The temperature in degrees fahrenheit.">tempf=<span class="tempfvalue">73</span></span><!--
-            -->&<span class="blue" data-tooltip="Required. The wind speed in miles per hour.">windspeedmph=<span class="windspeedmphvalue">1.5</span></span><!--
-            -->&<span class="indigo" data-tooltip="Required. The wind gust in miles per hour.">windgustmph=<span class="windgustmphvalue">2.7</span></span><!--
-            -->&<span class="purple" data-tooltip="Required. The direction that the wind is coming from, 0–359 degrees.">winddir=<span class="winddirvalue">270</span></span><!--
-            -->&<span class="slate" data-tooltip="Optional. The barometer pressure in Hectopascals/Millibars.">baromin=<span class="barominvalue">980.0</span></span><!--
-            -->&<span class="red" data-tooltip="Optional. The relative humidity from 0 to 100 percent.">humidity=<span class="humidityvalue">42</span></span><!--
-            -->&<span class="orange" data-tooltip="Optional. The solar radiation in W/m².">solarradiation=<span class="solarradiationvalue">170</span></span><!--
-            -->&<span class="pumpkin" data-tooltip="Optional. The amount of rain that fell over the past hour in inches.">rainin=<span class="raininvalue">0</span></span><!--
-            -->&<span class="green" data-tooltip="Optional. The amount of rain that fell over the past 24 hours in inches.">dailyrainin=<span class="dailyraininvalue">1.5</span></span><!--
+            -->?<a style="text-decoration:none;" href="https://madis.ncep.noaa.gov/cwop_signup.shtml" target="_blank"><span class="pico-color-red-contrast" style="cursor:pointer;" data-tooltip="Required. Your CWOP or Ham Radio ID. Click for more info.">id=CW0001</span></a><!--
+            -->&<span class="pico-color-orange-contrast" data-tooltip="Required. Your weather station's latitude in decimal degrees.">lat=38.892954</span><!--
+            -->&<span class="pico-color-pumpkin-contrast" data-tooltip="Required. Your weather station's longitude in decimal degrees.">long=&minus;&zwnj;77.0328578</span><!--
+            -->&<span class="pico-color-green-contrast" data-tooltip=" Required. The time that your weather reading was taken in ISO Date or Epoch (milliseconds) format.">time=<span class="timevalue">1672531200000</span></span><!--
+            -->&<span class="pico-color-jade-contrast" data-tooltip="Required. The temperature in degrees fahrenheit.">tempf=<span class="tempfvalue">73</span></span><!--
+            -->&<span class="pico-color-blue-contrast" data-tooltip="Required. The wind speed in miles per hour.">windspeedmph=<span class="windspeedmphvalue">1.5</span></span><!--
+            -->&<span class="pico-color-indigo-contrast" data-tooltip="Required. The wind gust in miles per hour.">windgustmph=<span class="windgustmphvalue">2.7</span></span><!--
+            -->&<span class="pico-color-purple-contrast" data-tooltip="Required. The direction that the wind is coming from, 0–359 degrees.">winddir=<span class="winddirvalue">270</span></span><!--
+            -->&<span class="pico-color-slate-contrast" data-tooltip="Optional. The barometer pressure in Hectopascals/Millibars.">baromin=<span class="barominvalue">980.0</span></span><!--
+            -->&<span class="pico-color-red-contrast" data-tooltip="Optional. The relative humidity from 0 to 100 percent.">humidity=<span class="humidityvalue">42</span></span><!--
+            -->&<span class="pico-color-orange-contrast" data-tooltip="Optional. The solar radiation in W/m².">solarradiation=<span class="solarradiationvalue">170</span></span><!--
+            -->&<span class="pico-color-pumpkin-contrast" data-tooltip="Optional. The amount of rain that fell over the past hour in inches.">rainin=<span class="raininvalue">0</span></span><!--
+            -->&<span class="pico-color-green-contrast" data-tooltip="Optional. The amount of rain that fell over the past 24 hours in inches.">dailyrainin=<span class="dailyraininvalue">1.5</span></span><!--
           --></mark>
         </p>
         
