@@ -103,7 +103,7 @@ export async function handleRequest(request) {
 
 function buildPacket(observation) {
 
-  let id, lat, long, time, tempf, windspeedmph, windgustmph, winddir, rainhour, rainday, pressure, humidity, solarradiation;
+  let id, lat, long, time, tempf, windspeedmph, windgustmph, winddir, rainhour, rainsincemidnight, rainlast24hr, pressure, humidity, solarradiation;
 
   if (observation instanceof URL) {
     if (observation.searchParams.get('id')) id = observation.searchParams.get('id');
@@ -115,7 +115,8 @@ function buildPacket(observation) {
     if (observation.searchParams.get('windgustmph')) windgustmph = Number(observation.searchParams.get('windgustmph'));
     if (observation.searchParams.get('winddir')) winddir = Number(observation.searchParams.get('winddir'));
     if (observation.searchParams.get('rainin')) rainhour = Number(observation.searchParams.get('rainin'));
-    if (observation.searchParams.get('dailyrainin')) rainday = Number(observation.searchParams.get('dailyrainin'));
+    if (observation.searchParams.get('dailyrainin')) rainsincemidnight = Number(observation.searchParams.get('dailyrainin'));
+    if (observation.searchParams.get('last24hrrainin')) rainlast24hr = Number(observation.searchParams.get('last24hrrainin'));
     if (observation.searchParams.get('baromin')) pressure = Number(observation.searchParams.get('baromin'));
     if (observation.searchParams.get('humidity')) humidity = Number(observation.searchParams.get('humidity'));
     if (observation.searchParams.get('solarradiation')) solarradiation = Number(observation.searchParams.get('solarradiation'));
@@ -129,7 +130,8 @@ function buildPacket(observation) {
     if (observation.windgustmph) windgustmph = Number(observation.windgustmph);
     if (observation.winddir) winddir = Number(observation.winddir);
     if (observation.rainin) rainhour = Number(observation.rainin);
-    if (observation.dailyrainin) rainday = Number(observation.dailyrainin);
+    if (observation.dailyrainin) rainsincemidnight = Number(observation.dailyrainin);
+    if (observation.last24hrrainin) rainlast24hr = Number(observation.last24hrrainin);
     if (observation.baromin) pressure = Number(observation.baromin);
     if (observation.humidity) humidity = Number(observation.humidity);
     if (observation.solarradiation) solarradiation = Number(observation.solarradiation);
@@ -175,8 +177,11 @@ function buildPacket(observation) {
   if (rainhour != null) {
     packet += 'r' + (rainhour * 100).toFixed(0).toString().padStart(3, '0');
   }
-  if (rainday != null) {
-    packet += 'p' + (rainday * 100).toFixed(0).toString().padStart(3, '0');
+  if (rainsincemidnight != null) {
+    packet += 'P' + (rainsincemidnight * 100).toFixed(0).toString().padStart(3, '0');
+  }
+  if (rainlast24hr != null) {
+    packet += 'p' + (rainlast24hr * 100).toFixed(0).toString().padStart(3, '0');
   }
   if (humidity != null) {
     packet += 'h' + (humidity % 100).toString().padStart(2, '0');
