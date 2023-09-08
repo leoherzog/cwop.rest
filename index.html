@@ -133,8 +133,9 @@
             -->&<span class="pico-color-slate-contrast" data-tooltip="Optional. The barometer pressure in Hectopascals/Millibars.">baromin=<span class="barominvalue">980.0</span></span><!--
             -->&<span class="pico-color-red-contrast" data-tooltip="Optional. The relative humidity from 0 to 100 percent.">humidity=<span class="humidityvalue">42</span></span><!--
             -->&<span class="pico-color-orange-contrast" data-tooltip="Optional. The solar radiation in W/m².">solarradiation=<span class="solarradiationvalue">170</span></span><!--
-            -->&<span class="pico-color-pumpkin-contrast" data-tooltip="Optional. The amount of rain that fell over the past hour in inches.">rainin=<span class="raininvalue">0</span></span><!--
-            -->&<span class="pico-color-green-contrast" data-tooltip="Optional. The amount of rain that fell over the past 24 hours in inches.">dailyrainin=<span class="dailyraininvalue">1.5</span></span><!--
+            -->&<span class="pico-color-pumpkin-contrast" data-tooltip="Optional. The amount of rain that has fallen over the past hour in inches.">rainin=<span class="raininvalue">0</span></span><!--
+            -->&<span class="pico-color-green-contrast" data-tooltip="Optional. The amount of rain that has fallen since midnight in inches.">dailyrainin=<span class="dailyraininvalue">1.5</span></span><!--
+            -->&<span class="pico-color-jade-contrast" data-tooltip="Optional. The amount of rain that has fallen over the past 24 hours in inches.">last24hrrainin=<span class="last24hrraininvalue">2.5</span></span><!--
           --></mark>
         </p>
         
@@ -152,8 +153,9 @@
   "baromin": <span class="barominvalue">980.0</span>, <span class="secondary">// Optional. The barometer pressure in Hectopascals/Millibars.</span>
   "humidity": <span class="humidityvalue">42</span>, <span class="secondary">// Optional. The relative humidity from 0 to 100 percent.</span>
   "solarradiation": <span class="solarradiationvalue">170</span>, <span class="secondary">// Optional. The solar radiation in W/m².</span>
-  "rainin": <span class="raininvalue">0</span>, <span class="secondary">// Optional. The amount of rain that fell over the past hour in inches.</span>
-  "dailyrainin": <span class="dailyraininvalue">1.5</span> <span class="secondary">// Optional. The amount of rain that fell over the past 24 hours in inches.</span>
+  "rainin": <span class="raininvalue">0</span>, <span class="secondary">// Optional. The amount of rain that has fallen over the past hour in inches.</span>
+  "dailyrainin": <span class="dailyraininvalue">1.5</span> <span class="secondary">// Optional. The amount of rain that has fallen since midnight in inches.</span>
+  "last24hrraininvalue": <span class="dailyraininvalue">2.5</span> <span class="secondary">// Optional. The amount of rain that has fallen over the past 24 hours in inches.</span>
 }</pre>
 
       </article>
@@ -355,8 +357,9 @@
         let baromin = getRandomNumber(970, 1050, 1);
         let humidity = getRandomNumber(10, 100, 0);
         let solarradiation = getRandomNumber(0, 1000, 0);
-        let rainin = getRandomNumber(0, 1, 1);
-        let dailyrainin = getRandomNumber(0, 10, 1);
+        let rainin = getRandomNumber(0, 2, 1);
+        let dailyrainin = Number(getRandomNumber(0, 10, 1) + Number(rainin)).toFixed(1);
+        let last24hrrainin = Number(getRandomNumber(0, 10, 1) + Number(dailyrainin)).toFixed(1);
 
         Array.from(document.getElementsByClassName('timevalue')).forEach(x => x.innerText = time);
         Array.from(document.getElementsByClassName('tempfvalue')).forEach(x => x.innerText = tempf);
@@ -368,6 +371,7 @@
         Array.from(document.getElementsByClassName('solarradiationvalue')).forEach(x => x.innerText = solarradiation);
         Array.from(document.getElementsByClassName('raininvalue')).forEach(x => x.innerText = rainin);
         Array.from(document.getElementsByClassName('dailyraininvalue')).forEach(x => x.innerText = dailyrainin);
+        Array.from(document.getElementsByClassName('last24hrraininvalue')).forEach(x => x.innerText = last24hrrainin);
       
       });
     </script>
