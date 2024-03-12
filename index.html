@@ -91,7 +91,7 @@
     <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "445b2b84397047588632863154eb739d"}'></script>
   </head>
   <body>
-    <div style="position: absolute; top: 0px; left: 8px">
+    <div style="position: absolute; top: 0px; left: 8px; cursor: pointer">
       <span id="theme" style="font-size: 16px" aria-label="Toggle light and dark mode">☀️</span>
     </div>
 
@@ -108,14 +108,7 @@
     <header class="container" style="margin-top: 10vh; margin-bottom: 20vh">
       <hgroup>
         <h1 style="font-size: 400%">
-          <svg
-            style="width: 5%; max-width: 50px"
-            aria-label="A light blue logo of a lightning bolt whose top form an arrow pointing up"
-            xmlns="http://www.w3.org/2000/svg"
-            zoomAndPan="magnify"
-            viewBox="0 0 127.5 352.5"
-            preserveAspectRatio="xMidYMid"
-            xmlns:v="https://vecta.io/nano">
+          <svg style="width: 5%; max-width: 50px" aria-label="A light blue logo of a lightning bolt whose top form an arrow pointing up" xmlns="http://www.w3.org/2000/svg" zoomAndPan="magnify" viewBox="0 0 127.5 352.5" preserveAspectRatio="xMidYMid" xmlns:v="https://vecta.io/nano">
             <defs>
               <clipPath id="A">
                 <path d="M129.832 23.031h124.324v337.98H129.832zm0 0" clip-rule="nonzero" />
@@ -154,8 +147,7 @@
             ><!--
             --><span>https://send.cwop.rest/</span
             ><!--
-            -->?<a style="text-decoration: none" href="https://madis.ncep.noaa.gov/cwop_signup.shtml" target="_blank"
-              ><span class="pico-color-red-contrast" style="cursor: pointer" data-tooltip="Required. Your CWOP or Ham Radio ID. Click for more info.">id=CW0001</span></a
+            -->?<a style="text-decoration: none" href="https://madis.ncep.noaa.gov/cwop_signup.shtml" target="_blank"><span class="pico-color-red-contrast" style="cursor: pointer" data-tooltip="Required. Your CWOP or Ham Radio ID. Click for more info.">id=CW0001</span></a
             ><!--
             -->&<span class="pico-color-orange-contrast" data-tooltip="Required. Your weather station's latitude in decimal degrees.">lat=38.892954</span
             ><!--
@@ -215,9 +207,8 @@
           <blockquote>
             <p>Do you have a well-placed personal weather station at your home or business? Would you like to share your data with the world? You can if you send your data to the Citizen Weather Observing Program (CWOP)!</p>
             <p>
-              CWOP is a volunteer-based network that allows owners of personal weather stations to share their station’s live data with the National Weather Service, emergency managers, wild land fire fighters, and Universities worldwide.
-              There are several options to getting your data online — inexpensive (even free) software programs, and extremely reliable, energy-efficient 'internet devices.' If you have a well-sited home weather station, and a broadband
-              internet connection, you’re just a few steps away from contributing your data to CWOP.
+              CWOP is a volunteer-based network that allows owners of personal weather stations to share their station’s live data with the National Weather Service, emergency managers, wild land fire fighters, and Universities worldwide. There are several options to getting your data online —
+              inexpensive (even free) software programs, and extremely reliable, energy-efficient 'internet devices.' If you have a well-sited home weather station, and a broadband internet connection, you’re just a few steps away from contributing your data to CWOP.
             </p>
             <footer>
               <cite>— <a href="https://www.weather.gov/cle/CWOP" target="_blank" class="secondary">https://www.weather.gov/cle/CWOP</a></cite>
@@ -244,27 +235,23 @@
           <summary>Why does this site in particular exist?</summary>
 
           <p>
-            Submitting your weather station data to CWOP is a pain, technologically. Most weather station reporting services use a simple HTTP GET request with URL parameters to submit data. By requiring a direct TCP connection, it is
-            difficult to submit your weather data to CWOP from many contexts. This service allows you to submit from any device that can make an HTTP request.
+            Submitting your weather station data to CWOP is a pain, technologically. Most weather station reporting services use a simple HTTP GET request with URL parameters to submit data. By requiring a direct TCP connection, it is difficult to submit your weather data to CWOP from many contexts.
+            This service allows you to submit from any device that can make an HTTP request.
           </p>
           <p>Scattered about the official website are the instructions:</p>
           <blockquote>
             <p>
-              Each TCP connection to port 14580 will begin with receiving at least one text line from the APRS server (terminated with cr/lf). This line identifies the server software you just connected to which you can safely ignore. A
-              line is sent from the server upon connection and upon receiving that line, your client will send a login line. Suppose your CWOP identifier is EW9876. Your login line would be:
+              Each TCP connection to port 14580 will begin with receiving at least one text line from the APRS server (terminated with cr/lf). This line identifies the server software you just connected to which you can safely ignore. A line is sent from the server upon connection and upon receiving
+              that line, your client will send a login line. Suppose your CWOP identifier is EW9876. Your login line would be:
             </p>
             <p>user EW9876 pass -1 vers YourSoftwareName 1.0</p>
             <p>
-              The CWOP identifier is the user name, the passcode is -1 (minus one), and the software identifier is your software name (no spaces) followed by the version number (containing no spaces). There is a single space between each
-              keyword and each value. Once that is entered (terminate with cr/lf), you will receive an acknowledgement line from the server and it can be safely ignored. After receiving the login acknowledgement, the server is ready to take
-              the single APRS "packet" with the weather data. After the packet is sent, your client can safely disconnect from the server. There will be no acknowledgement of the packet being received at the server (the acknowledgement is
-              handled by the TCP underlying protocol). The APRS "packet" is also terminated by cr/lf. The APRS "packet" is a weather position packet with a very specific header:
+              The CWOP identifier is the user name, the passcode is -1 (minus one), and the software identifier is your software name (no spaces) followed by the version number (containing no spaces). There is a single space between each keyword and each value. Once that is entered (terminate with
+              cr/lf), you will receive an acknowledgement line from the server and it can be safely ignored. After receiving the login acknowledgement, the server is ready to take the single APRS "packet" with the weather data. After the packet is sent, your client can safely disconnect from the
+              server. There will be no acknowledgement of the packet being received at the server (the acknowledgement is handled by the TCP underlying protocol). The APRS "packet" is also terminated by cr/lf. The APRS "packet" is a weather position packet with a very specific header:
             </p>
             <p>EW9876>APRS,TCPIP*:rest of packet</p>
-            <p>
-              The first "callsign" is the CWOP station identifier for that station as shown. The next item is TCPIP followed by an asterisk. All capital letters must be used for the packet header. The rest of the packet follows the format
-              specified...
-            </p>
+            <p>The first "callsign" is the CWOP station identifier for that station as shown. The next item is TCPIP followed by an asterisk. All capital letters must be used for the packet header. The rest of the packet follows the format specified...</p>
             <footer>
               <cite>— <a href="http://wxqa.com/faq.html" target="_blank" class="secondary">http://wxqa.com/faq.html</a></cite>
             </footer>
@@ -273,8 +260,8 @@
           <blockquote>
             <p>Use a server designator of "cwop.aprs.net" to send to servers (CWOP1, CWOP2, CWOP3, CWOP4) designated for CWOP non-ham use. These servers do not require a validation code or password.</p>
             <p>
-              Use a server designator of "rotate.aprs.net" to send to the APRS Core servers (FIRST, SECOND, THIRD) or "rotate.aprs2.net" to send to the Tier 2 servers. Note that these servers require a validation code which currently
-              licensed amateur radio operators can obtain from cwop-support at noaa dot gov.
+              Use a server designator of "rotate.aprs.net" to send to the APRS Core servers (FIRST, SECOND, THIRD) or "rotate.aprs2.net" to send to the Tier 2 servers. Note that these servers require a validation code which currently licensed amateur radio operators can obtain from cwop-support at
+              noaa dot gov.
             </p>
             <p>Use port 14580 first; but if that does not work, try port 23.</p>
             <footer>
@@ -311,10 +298,7 @@
 
         <details>
           <summary>How does send.cwop.rest work? How can I trust you?</summary>
-          <p>
-            This website, and the <mark>send.cwop.rest</mark> service, are open source and powered by Cloudflare Pages and Cloudflare Workers. You are free to inspect the code, or copy it into your own Cloudflare Worker and run your own
-            instance.
-          </p>
+          <p>This website, and the <mark>send.cwop.rest</mark> service, are open source and powered by Cloudflare Pages and Cloudflare Workers. You are free to inspect the code, or copy it into your own Cloudflare Worker and run your own instance.</p>
           <a href="https://github.com/leoherzog/cwop.rest" role="button" class="">See the Source Code</a>
         </details>
 
