@@ -1,7 +1,7 @@
 import { connect } from 'cloudflare:sockets';
 const cache = caches.default;
 const host_domain_name = 'send.cwop.rest'
-const host_url = `https://${host_domain_name}`;
+const host_url = 'https://' + host_domain_name;
 const packet_sender_name = 'cwop.rest';
 
 export default {
@@ -21,7 +21,7 @@ export async function handleRequest(request) {
 
     if (url.searchParams.has('packet')) { // default to provided packet, if any
       packet = url.searchParams.get('packet');
-      packet = decodeURIComponent(packet) + '—viacwop.rest';
+      packet = decodeURIComponent(packet) + '—via' + packet_sender_name;
     } else if (url.searchParams.has('id') &&  // otherwise, check for params needed to build our own
                url.searchParams.has('lat') &&
                url.searchParams.has('long') &&
@@ -49,7 +49,7 @@ export async function handleRequest(request) {
     }
 
     if (body.packet) {  // default to provided packet, if any
-      packet = body.packet + '—viacwop.rest';
+      packet = body.packet + '—via' + packet_sender_name;
     } else if (body.time && body.id && body.lat && body.long && body.tempf != null && body.windspeedmph != null && body.windgustmph != null && body.winddir != null) {  // otherwise, check for required params to build our own
       packet = buildPacket(body);
     } else {
@@ -153,15 +153,15 @@ function buildPacket(observation) {
   
   if (lat < 0) {
     lat = Math.abs(lat);
-    lat = Math.floor(lat).toString().padStart(2, 0) + (Math.floor(60 * parseFloat(lat % 1)*100)/100).toFixed(2).toString().padStart(5, 0) + 'S';
+    lat = Math.floor(lat).toString().padStart(2, '0') + (Math.floor(60 * parseFloat(lat % 1)*100)/100).toFixed(2).toString().padStart(5, '0') + 'S';
   } else {
-    lat = Math.floor(lat).toString().padStart(2, 0) + (Math.floor(60 * parseFloat(lat % 1)*100)/100).toFixed(2).toString().padStart(5, 0) + 'N';
+    lat = Math.floor(lat).toString().padStart(2, '0') + (Math.floor(60 * parseFloat(lat % 1)*100)/100).toFixed(2).toString().padStart(5, '0') + 'N';
   }
   if (long < 0) {
     long = Math.abs(long);
-    long = Math.floor(long).toString().padStart(3, 0) + (Math.floor(60 * parseFloat(long % 1)*100)/100).toFixed(2).toString().padStart(5, 0) + 'W';
+    long = Math.floor(long).toString().padStart(3, '0') + (Math.floor(60 * parseFloat(long % 1)*100)/100).toFixed(2).toString().padStart(5, '0') + 'W';
   } else {
-    long = Math.floor(long).toString().padStart(3, 0) + (Math.floor(60 * parseFloat(long % 1)*100)/100).toFixed(2).toString().padStart(5, 0) + 'E';
+    long = Math.floor(long).toString().padStart(3, '0') + (Math.floor(60 * parseFloat(long % 1)*100)/100).toFixed(2).toString().padStart(5, '0') + 'E';
   }
   packet += 'z' + lat + '/' + long;
 
@@ -288,7 +288,7 @@ export async function sendPacket(packet, server, port, validationCode = '-1') {
 
   // Send login line
   const id = packet.split('>')[0];
-  const loginLine = 'user ' + id + ' pass ' + validationCode + ' vers cwop.rest 1.0\r\n';
+  const loginLine = 'user ' + id + ' pass ' + validationCode + ' vers ' + packet_sender_name + ' 1.0\r\n';
   console.log('Sending to server: ', loginLine);
   let encoded = encoder.encode(loginLine);
   await writer.write(encoded);
