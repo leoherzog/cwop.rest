@@ -2,7 +2,8 @@ import { connect } from 'cloudflare:sockets';
 const cache = caches.default;
 const host_domain_name = 'send.cwop.rest'
 const host_url = 'https://' + host_domain_name;
-const packet_sender_name = 'cwop.rest';
+const packet_software_name = 'cwop.rest 1.1';
+const packet_sender_code = 'eREST';
 
 export default {
   async fetch(request) {
@@ -21,7 +22,7 @@ export async function handleRequest(request) {
 
     if (url.searchParams.has('packet')) { // default to provided packet, if any
       packet = url.searchParams.get('packet');
-      packet = decodeURIComponent(packet) + '—via' + packet_sender_name;
+      packet = decodeURIComponent(packet);
     } else if (url.searchParams.has('id') &&  // otherwise, check for params needed to build our own
                url.searchParams.has('lat') &&
                url.searchParams.has('long') &&
@@ -49,7 +50,7 @@ export async function handleRequest(request) {
     }
 
     if (body.packet) {  // default to provided packet, if any
-      packet = body.packet + '—via' + packet_sender_name;
+      packet = body.packet.trim().replace(/\s+$/, '');
     } else if (body.time && body.id && body.lat && body.long && body.tempf != null && body.windspeedmph != null && body.windgustmph != null && body.winddir != null) {  // otherwise, check for required params to build our own
       packet = buildPacket(body);
     } else {
@@ -205,7 +206,7 @@ function buildPacket(observation) {
     }
   }
 
-  packet += packet_sender_name;
+  packet += packet_sender_code;
 
   return packet;
 
@@ -224,6 +225,13 @@ function validatePacket(packet) {
     return new Response('Packet header must be all uppercase', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
 
+  const atIdx = packet.indexOf('@'); // timestamp marker
+  const zIdx = packet.indexOf('z', atIdx); // date-time terminator
+  const uIdx = packet.indexOf('_', zIdx); // underscore before wind dir
+  if (atIdx < 0 || zIdx < 0 || uIdx < 0) {
+    return new Response('Malformed packet (missing @, z or _)', { "status": 422 }); // HTTP 422 Unprocessable Content
+  }
+
   // check timestamp pattern
   const timePattern = /^(0[1-9]|[12][0-9]|3[01])([01][0-9]|2[0-3])[0-5][0-9]$/;
   let time = packet.substring(packet.indexOf('@') + 1, packet.lastIndexOf('z'));
@@ -231,7 +239,7 @@ function validatePacket(packet) {
     return new Response('Invalid time in packet', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
 
-  // Check if timestamp is within last 5 minutes
+  // check if timestamp is within last 5 minutes
   let day = parseInt(time.substring(0,2));
   let hour = parseInt(time.substring(2,4));
   let minute = parseInt(time.substring(4,6));
@@ -282,13 +290,13 @@ export async function sendPacket(packet, server, port, validationCode = '-1') {
   const reader = socket.readable.getReader();
   const encoder = new TextEncoder();
   
-  // Wait for server's initial message - http://www.wxqa.com/faq.html
+  // wait for server's initial message - http://www.wxqa.com/faq.html
   let initialMessage = await reader.read();
   console.log('Received from server: ', new TextDecoder().decode(initialMessage.value));
 
-  // Send login line
+  // send login line
   const id = packet.split('>')[0];
-  const loginLine = 'user ' + id + ' pass ' + validationCode + ' vers ' + packet_sender_name + ' 1.0\r\n';
+  const loginLine = 'user ' + id + ' pass ' + validationCode + ' vers ' + packet_software_name + '\r\n';
   console.log('Sending to server: ', loginLine);
   let encoded = encoder.encode(loginLine);
   await writer.write(encoded);
@@ -303,13 +311,23 @@ export async function sendPacket(packet, server, port, validationCode = '-1') {
   console.log('Encoded packet bytes: ', Array.from(encoded));
   await writer.write(encoded);
 
+  // close the write side
   writer.close();
+
+  // drain everything the server says before disconnecting
+  let lastChunk = value; // start with the ACK we already got
+  while (true) {
+    let { value: chunk, done: rdDone } = await reader.read();
+    if (rdDone) break; // socket closed by server
+    console.log('Received from server: ', new TextDecoder().decode(chunk));
+    lastChunk = chunk; // remember the most recent text
+  }
   reader.releaseLock();
-  
-  let serverResponse = new TextDecoder().decode(value);
+  let serverResponse = new TextDecoder().decode(lastChunk);
   console.log('Received from server: ', serverResponse);
 
   console.log('Closing connection to ' + server + ':' + port);
   
-  return new Response(serverResponse, { "headers": { "Content-Type": "text/plain" } }); 
+  return new Response(serverResponse, { "headers": { "Content-Type": "text/plain" } });
+
 }
