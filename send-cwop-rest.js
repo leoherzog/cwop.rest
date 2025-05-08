@@ -166,7 +166,7 @@ function buildPacket(observation) {
   }
   packet += 'z' + lat + '/' + long;
 
-  packet += '_' + (winddir || '...').toString().padStart(3, '0');
+  packet += '_' + (winddir != null ? Math.round(winddir).toString().padStart(3, '0') : '...');
 
   packet += '/' + (windspeedmph != null ? Math.ceil(windspeedmph) : '...').toString().padStart(3, '0');
 
@@ -193,7 +193,7 @@ function buildPacket(observation) {
     packet += 'p' + (rainlast24hr * 100).toFixed(0).toString().padStart(3, '0');
   }
   if (humidity != null) {
-    packet += 'h' + (humidity % 100).toString().padStart(2, '0');
+    packet += 'h' + Math.round(humidity % 100).toString().padStart(2, '0');
   }
   if (pressure != null) { // "altimeter" (QNH) format, in tenths of millibars
     packet += 'b' + (Math.round(pressure * 10)).toString().padStart(5, '0');
@@ -202,7 +202,7 @@ function buildPacket(observation) {
     if (solarradiation >= 1000) {
       packet += 'l' + (solarradiation % 1000).toString().padStart(3, '0');
     } else {
-      packet += 'L' + solarradiation.toString().padStart(3, '0');
+      packet += 'L' + Math.round(solarradiation).toString().padStart(3, '0');
     }
   }
 
@@ -275,6 +275,79 @@ function validatePacket(packet) {
   }
   if (longitude < -180 || longitude > 180) {
     return new Response('Invalid longitude in packet', { "status": 422 }); // HTTP 422 Unprocessable Content
+  }
+
+  // valid temp
+  let tIdx = packet.indexOf('t', uIdx); // first 't' after winds
+  if (tIdx !== -1 && tIdx + 4 <= packet.length) {
+    let tStr = packet.substring(tIdx + 1, tIdx + 4); // '...', '075', '-12'
+    if (tStr !== '...') {
+      if (!/^-?\d{2,3}$/.test(tStr)) {
+        return new Response('Invalid temperature', { status: 422 });
+      }
+      let tVal = Number(tStr);
+      if (tVal < -99 || tVal > 999) {
+        return new Response('Temperature out of range', { status: 422 });
+      }
+    }
+  }
+
+  // wind dir / speed / gust live in fixed positions after "_ddd/sss ggg"
+  let windDirStr = packet.substring(uIdx + 1, uIdx + 4); // ddd or ...
+  let windSpdStr = packet.substring(uIdx + 5, uIdx + 8); // ddd or ...
+  let windGstStr = packet.substring(uIdx + 9, uIdx + 12); // ddd or ...
+
+  // wind direction 0–360 or "..."
+  if (windDirStr !== '...') {
+    let wd = Number(windDirStr);
+    if (!Number.isFinite(wd) || wd < 0 || wd > 360) {
+      return new Response('Invalid wind direction in packet', { status: 422 });
+    }
+  }
+
+  // wind speed & gust 0–999 or "..."
+  const badWind = s => s !== '...' && (!/^\d{3}$/.test(s) || Number(s) > 999);
+  if (badWind(windSpdStr) || badWind(windGstStr)) {
+    return new Response('Invalid wind speed/gust in packet', { status: 422 });
+  }
+
+  // rain hour / daily / 24 h tokens r### P### p###
+  const rainTokens = ['r', 'P', 'p'];
+  for (let tok of rainTokens) {
+    let idx = packet.indexOf(tok, uIdx); // search forward once
+    if (idx !== -1 && idx + 4 <= packet.length) {
+      let rStr = packet.substr(idx + 1, 3);
+      if (!/^\d{3}$/.test(rStr)) {
+        return new Response('Invalid rain token '+tok, { status: 422 });
+      }
+   }
+  }
+
+  // humidity token is optional; if present must be 0–100
+  let hIdx = packet.indexOf('h', uIdx); // search after the wind tokens
+  if (hIdx !== -1 && hIdx + 3 <= packet.length) {
+    let hStr = packet.substring(hIdx + 1, hIdx + 3);
+    if (!/^\d{2}$/.test(hStr) || Number(hStr) > 100) {
+      return new Response('Invalid humidity in packet', { status: 422 });
+    }
+  }
+
+  // barometer token bxxxxx (optional)
+  let bIdx = packet.indexOf('b', uIdx);
+  if (bIdx !== -1 && bIdx + 6 <= packet.length) {
+    let bStr = packet.substr(bIdx + 1, 5);
+    if (!/^\d{5}$/.test(bStr) || Number(bStr) > 19999) {
+      return new Response('Invalid barometer token', { status: 422 });
+    }
+  }
+
+  // solar-radiation token L/l### must be 0–999
+  let lIdx = packet.search(/[lL]\d{3}/); // first l/L followed by 3 digits
+  if (lIdx !== -1) {
+    let sr = Number(packet.substr(lIdx + 1, 3));
+    if (sr > 999) {
+      return new Response('Invalid solar radiation in packet', { status: 422 });
+    }
   }
 
   return true;
