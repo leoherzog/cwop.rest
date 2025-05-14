@@ -146,7 +146,7 @@ function buildPacket(observation) {
     if (observation.solarradiation) solarradiation = Number(observation.solarradiation);
   }
 
-  let packet = id + '>APRS,TCPIP*:@';
+  let packet = id + '>APREST,TCPIP*:@';
 
   packet += time.getUTCDate().toString().padStart(2, '0') +
             time.getUTCHours().toString().padStart(2, '0') +
