@@ -244,13 +244,34 @@ function validatePacket(packet) {
   let hour = parseInt(time.substring(2,4));
   let minute = parseInt(time.substring(4,6));
 
-  let packetTimestamp = new Date();
-  packetTimestamp.setUTCDate(day);
-  packetTimestamp.setUTCHours(hour);
-  packetTimestamp.setUTCMinutes(minute);
-  packetTimestamp.setUTCSeconds(0);
-  packetTimestamp.setUTCMilliseconds(0);
   let now = new Date();
+
+  // try current month first
+  let packetTimestamp = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    day,
+    hour,
+    minute,
+    0,
+    0
+  ));
+
+  // if timestamp is in the future (beyond our 5-minute tolerance window),
+  // it must be from the previous month
+  if (packetTimestamp.getTime() - now.getTime() > 5 * 60 * 1000) {
+    packetTimestamp = new Date(Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth() - 1,  // previous month
+      day,
+      hour,
+      minute,
+      0,
+      0
+    ));
+  }
+
+  // now check if within 5-minute window
   if (now.getTime() - packetTimestamp.getTime() > 5 * 60 * 1000) {
     return new Response('Timestamp in packet is not within last 5 minutes', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
