@@ -83,6 +83,8 @@ export async function handleRequest(request) {
     }
   }
 
+  await cache.put(cacheKey, new Response(Date.now().toString()));
+
   // attempting to send...
   let server = 'cwop.aprs.net';
   if (validationCode) server = 'rotate.aprs.net'; // http://www.wxqa.com/servers2use.html
@@ -98,8 +100,6 @@ export async function handleRequest(request) {
   catch(e) {
     await sendPacket(packet, server, 23, validationCode);
   }
-
-  await cache.put(cacheKey, new Response(Date.now().toString()));
 
   let msg = `APRS packet '${packet}' sent to '${server}'`;
   console.log(msg);
