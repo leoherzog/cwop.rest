@@ -168,9 +168,9 @@ function buildPacket(observation) {
 
   packet += '_' + (winddir != null ? Math.round(winddir).toString().padStart(3, '0') : '...');
 
-  packet += '/' + (windspeedmph != null ? Math.ceil(windspeedmph) : '...').toString().padStart(3, '0');
+  packet += '/' + (windspeedmph != null ? Math.round(windspeedmph) : '...').toString().padStart(3, '0');
 
-  packet += 'g' + (windgustmph != null ? Math.ceil(windgustmph) : '...').toString().padStart(3, '0');
+  packet += 'g' + (windgustmph != null ? Math.round(windgustmph) : '...').toString().padStart(3, '0');
 
   if (tempf != null) {
     if (tempf >= 0) {
