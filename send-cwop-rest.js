@@ -176,7 +176,7 @@ function buildPacket(observation) {
     if (tempf >= 0) {
       packet += 't' + Math.round(tempf).toString().padStart(3, '0');
     } else {
-      packet += 't' + '-' + Math.abs(Math.floor(tempf)).toString().padStart(2, '0');
+      packet += 't' + '-' + Math.abs(Math.round(tempf)).toString().padStart(2, '0');
     }
   } else {
     packet += 't...';
