@@ -1,0 +1,3 @@
+[submodule "aprsspec"]
+	path = aprsspec
+	url = git@github.com:wb2osz/aprsspec.git
