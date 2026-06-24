@@ -315,53 +315,43 @@ function validatePacket(packet) {
     }
   }
 
-  // wind dir / speed / gust live in fixed positions after "_ddd/sss ggg"
-  let windDirStr = packet.substring(uIdx + 1, uIdx + 4); // ddd or ...
-  let windSpdStr = packet.substring(uIdx + 5, uIdx + 8); // ddd or ...
-  let windGstStr = packet.substring(uIdx + 9, uIdx + 12); // ddd or ...
+  // wind dir / speed / gust live in fixed positions after the symbol code: _ddd/sssgNNN
+  if (packet[uIdx + 4] !== '/' || packet[uIdx + 8] !== 'g') {
+    return new Response('Malformed wind data in packet', { status: 422 }); // HTTP 422 Unprocessable Content
+  }
+  let windDirStr = packet.substring(uIdx + 1, uIdx + 4); // ddd, ... or spaces
+  let windSpdStr = packet.substring(uIdx + 5, uIdx + 8); // ddd, ... or spaces
+  let windGstStr = packet.substring(uIdx + 9, uIdx + 12); // ddd, ... or spaces
 
-  // wind direction 0–360 or "..."
-  if (windDirStr !== '...') {
-    let wd = Number(windDirStr);
-    if (!Number.isFinite(wd) || wd < 0 || wd > 360) {
-      return new Response('Invalid wind direction in packet', { status: 422 });
-    }
+  // missing values may be expressed as dots or spaces
+  const noData = s => s === '...' || s === '   ';
+
+  // wind direction 0–360 (000 = unknown), or the no-data sentinel
+  if (!noData(windDirStr) && (!/^\d{3}$/.test(windDirStr) || Number(windDirStr) > 360)) {
+    return new Response('Invalid wind direction in packet', { status: 422 });
   }
 
-  // wind speed & gust 0–999 or "..."
-  const badWind = s => s !== '...' && (!/^\d{3}$/.test(s) || Number(s) > 999);
+  // wind speed & gust 0–999, or the no-data sentinel
+  const badWind = s => !noData(s) && (!/^\d{3}$/.test(s) || Number(s) > 999);
   if (badWind(windSpdStr) || badWind(windGstStr)) {
     return new Response('Invalid wind speed/gust in packet', { status: 422 });
   }
 
-  // rain hour / daily / 24 h tokens r### P### p###
-  const rainTokens = ['r', 'P', 'p'];
-  for (let tok of rainTokens) {
-    let idx = packet.indexOf(tok, uIdx); // search forward once
-    if (idx !== -1 && idx + 4 <= packet.length) {
-      let rStr = packet.substr(idx + 1, 3);
-      if (!/^\d{3}$/.test(rStr)) {
-        return new Response('Invalid rain token '+tok, { status: 422 });
-      }
-   }
+  // Optional tokens are matched with their exact digit counts and only within the
+  // weather data, so the trailing software/unit code (e.g. ...b09900wRSW, where the
+  // unit may itself contain r/p/h/b) can't be mistaken for a reading.
+  const wx = packet.slice(uIdx);
+
+  // humidity token, if present, must encode 0–100 (00 = 100%)
+  let hMatch = wx.match(/h(\d{2})/);
+  if (hMatch && Number(hMatch[1]) > 100) {
+    return new Response('Invalid humidity in packet', { status: 422 });
   }
 
-  // humidity token is optional; if present must be 0–100
-  let hIdx = packet.indexOf('h', uIdx); // search after the wind tokens
-  if (hIdx !== -1 && hIdx + 3 <= packet.length) {
-    let hStr = packet.substring(hIdx + 1, hIdx + 3);
-    if (!/^\d{2}$/.test(hStr) || Number(hStr) > 100) {
-      return new Response('Invalid humidity in packet', { status: 422 });
-    }
-  }
-
-  // barometer token bxxxxx (optional)
-  let bIdx = packet.indexOf('b', uIdx);
-  if (bIdx !== -1 && bIdx + 6 <= packet.length) {
-    let bStr = packet.substr(bIdx + 1, 5);
-    if (!/^\d{5}$/.test(bStr) || Number(bStr) > 19999) {
-      return new Response('Invalid barometer token', { status: 422 });
-    }
+  // barometer token, if present, is 5 digits (tenths of mb)
+  let bMatch = wx.match(/b(\d{5})/);
+  if (bMatch && Number(bMatch[1]) > 19999) {
+    return new Response('Invalid barometer token', { status: 422 });
   }
 
   // solar-radiation token L/l### must be 0–999
