@@ -165,15 +165,15 @@ function buildPacket(observation) {
 
   packet += '_' + (winddir != null ? (Math.round(winddir) === 0 ? 360 : Math.round(winddir)).toString().padStart(3, '0') : '...'); // 001-360; 000 is reserved for "unknown"
 
-  packet += '/' + (windspeedmph != null ? Math.round(windspeedmph) : '...').toString().padStart(3, '0');
+  packet += '/' + (windspeedmph != null ? Math.min(999, Math.round(windspeedmph)) : '...').toString().padStart(3, '0');
 
-  packet += 'g' + (windgustmph != null ? Math.round(windgustmph) : '...').toString().padStart(3, '0');
+  packet += 'g' + (windgustmph != null ? Math.min(999, Math.round(windgustmph)) : '...').toString().padStart(3, '0');
 
   if (tempf != null) {
     if (tempf >= 0) {
-      packet += 't' + Math.round(tempf).toString().padStart(3, '0');
+      packet += 't' + Math.min(999, Math.round(tempf)).toString().padStart(3, '0');
     } else {
-      packet += 't' + '-' + Math.abs(Math.round(tempf)).toString().padStart(2, '0');
+      packet += 't' + '-' + Math.min(99, Math.abs(Math.round(tempf))).toString().padStart(2, '0');
     }
   } else {
     packet += 't...';
@@ -181,25 +181,25 @@ function buildPacket(observation) {
   
   // optional readings
   if (rainhour != null) {
-    packet += 'r' + (rainhour * 100).toFixed(0).toString().padStart(3, '0');
+    packet += 'r' + Math.min(999, Math.round(rainhour * 100)).toString().padStart(3, '0');
   }
   if (rainsincemidnight != null) {
-    packet += 'P' + (rainsincemidnight * 100).toFixed(0).toString().padStart(3, '0');
+    packet += 'P' + Math.min(999, Math.round(rainsincemidnight * 100)).toString().padStart(3, '0');
   }
   if (rainlast24hr != null) {
-    packet += 'p' + (rainlast24hr * 100).toFixed(0).toString().padStart(3, '0');
+    packet += 'p' + Math.min(999, Math.round(rainlast24hr * 100)).toString().padStart(3, '0');
   }
   if (humidity != null) {
     packet += 'h' + Math.round(humidity % 100).toString().padStart(2, '0');
   }
   if (pressure != null) { // "altimeter" (QNH) format, in tenths of millibars
-    packet += 'b' + (Math.round(pressure * 10)).toString().padStart(5, '0');
+    packet += 'b' + Math.min(99999, Math.round(pressure * 10)).toString().padStart(5, '0');
   }
   if (solarradiation != null) {
     if (solarradiation >= 1000) {
-      packet += 'l' + (solarradiation % 1000).toString().padStart(3, '0');
+      packet += 'l' + (Math.min(1999, Math.round(solarradiation)) - 1000).toString().padStart(3, '0');
     } else {
-      packet += 'L' + Math.round(solarradiation).toString().padStart(3, '0');
+      packet += 'L' + Math.min(999, Math.round(solarradiation)).toString().padStart(3, '0');
     }
   }
 
