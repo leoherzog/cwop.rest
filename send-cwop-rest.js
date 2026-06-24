@@ -163,7 +163,7 @@ function buildPacket(observation) {
   }
   packet += 'z' + lat + '/' + long;
 
-  packet += '_' + (winddir != null ? Math.round(winddir).toString().padStart(3, '0') : '...');
+  packet += '_' + (winddir != null ? (Math.round(winddir) === 0 ? 360 : Math.round(winddir)).toString().padStart(3, '0') : '...'); // 001-360; 000 is reserved for "unknown"
 
   packet += '/' + (windspeedmph != null ? Math.round(windspeedmph) : '...').toString().padStart(3, '0');
 
