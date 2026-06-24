@@ -27,10 +27,7 @@ export async function handleRequest(request) {
                url.searchParams.has('lat') &&
                url.searchParams.has('long') &&
                url.searchParams.has('time') &&
-               url.searchParams.has('tempf') &&
-               url.searchParams.has('windspeedmph') &&
-               url.searchParams.has('windgustmph') &&
-               url.searchParams.has('winddir')) {
+               url.searchParams.has('tempf')) {
       packet = buildPacket(url);
     } else { // we need either a provided packet or required readings to make our own
       return new Response('Missing required packet or readings parameters', { "status": 422 });
@@ -51,7 +48,7 @@ export async function handleRequest(request) {
 
     if (body.packet) {  // default to provided packet, if any
       packet = body.packet.trim().replace(/\s+$/, '');
-    } else if (body.time && body.id && body.lat && body.long && body.tempf != null && body.windspeedmph != null && body.windgustmph != null && body.winddir != null) {  // otherwise, check for required params to build our own
+    } else if (body.time && body.id && body.lat && body.long && body.tempf != null) {  // otherwise, check for required params to build our own
       packet = buildPacket(body);
     } else {
       return new Response('Missing required packet or readings parameters in payload', { "status": 422 });
