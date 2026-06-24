@@ -274,12 +274,13 @@ function validatePacket(packet) {
     return new Response('Timestamp in packet is not within last 5 minutes', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
   
-  // check latlong
+  // check latlong — this CWOP feed accepts only uncompressed, full-precision coordinates;
+  // spec-legal compressed positions and position-ambiguity spaces are intentionally not supported
   const latLongPattern = /(\d{2})(\d{2})\.\d{2}[NS]\/(\d{3})(\d{2})\.\d{2}[EW]/;
   let latlong = packet.substring(packet.indexOf('z') + 1, packet.lastIndexOf('_'));
   let latlongmatch = latlong.match(latLongPattern);
   if (!latlongmatch) {
-    return new Response('Invalid location data in packet', { "status": 422 }); // HTTP 422 Unprocessable Content
+    return new Response('Unsupported or invalid location data in packet (expected uncompressed ddmm.hhN/dddmm.hhW)', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
   
   // check latlong values validity
