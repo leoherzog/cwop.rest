@@ -296,18 +296,19 @@ function validatePacket(packet) {
     return new Response('Invalid longitude in packet', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
 
-  // valid temp
+  // temperature is mandatory (spec: timestamp, wind dir/speed/gust and temperature must always be present)
   let tIdx = packet.indexOf('t', uIdx); // first 't' after winds
-  if (tIdx !== -1 && tIdx + 4 <= packet.length) {
-    let tStr = packet.substring(tIdx + 1, tIdx + 4); // '...', '075', '-12'
-    if (tStr !== '...') {
-      if (!/^-?\d{2,3}$/.test(tStr)) {
-        return new Response('Invalid temperature', { status: 422 });
-      }
-      let tVal = Number(tStr);
-      if (tVal < -99 || tVal > 999) {
-        return new Response('Temperature out of range', { status: 422 });
-      }
+  if (tIdx === -1 || tIdx + 4 > packet.length) {
+    return new Response('Missing temperature in packet', { "status": 422 }); // HTTP 422 Unprocessable Content
+  }
+  let tStr = packet.substring(tIdx + 1, tIdx + 4); // '...', '075', '-12'
+  if (tStr !== '...') {
+    if (!/^-?\d{2,3}$/.test(tStr)) {
+      return new Response('Invalid temperature', { status: 422 });
+    }
+    let tVal = Number(tStr);
+    if (tVal < -99 || tVal > 999) {
+      return new Response('Temperature out of range', { status: 422 });
     }
   }
 
