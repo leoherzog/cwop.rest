@@ -289,6 +289,9 @@ function validatePacket(packet) {
   let lonMinutes = parseInt(latlongmatch[4]);
   let latitude = latDegrees + latMinutes / 60;
   let longitude = lonDegrees + lonMinutes / 60;
+  if (latMinutes > 59 || lonMinutes > 59) {
+    return new Response('Invalid coordinate minutes in packet', { "status": 422 }); // minutes are 00-59
+  }
   if (latitude < -90 || latitude > 90) {
     return new Response('Invalid latitude in packet', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
