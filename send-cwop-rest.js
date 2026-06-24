@@ -2,7 +2,7 @@ import { connect } from 'cloudflare:sockets';
 const cache = caches.default;
 const host_domain_name = 'send.cwop.rest'
 const host_url = 'https://' + host_domain_name;
-const packet_software_name = 'cwop.rest 1.1';
+const packet_software_name = 'cwop.rest 1.1.1';
 const packet_sender_code = 'eREST';
 
 export default {
@@ -16,7 +16,7 @@ export async function handleRequest(request) {
   let packet, validationCode, manuallySpecifiedServer;
 
   const url = new URL(request.url); // used for params and host detection
-  
+
   if (request.method === 'GET') { // if they're using url params
 
     if (url.searchParams.has('packet')) { // default to provided packet, if any
@@ -55,7 +55,7 @@ export async function handleRequest(request) {
 
     validationCode = body.validation;
     manuallySpecifiedServer = body.server;
-    
+
   } else {
     return new Response('Invalid request method', { "status": 405 });  // HTTP 405 Method Not Allowed
   }
@@ -88,7 +88,7 @@ export async function handleRequest(request) {
   if (url.host !== host_domain_name) { // for testing
     return new Response('APRS packet "' + packet + '" would have been sent to ' + server, { "status": 200 });
   }
-  
+
   try {
     await sendPacket(packet, server, 14580, validationCode);
   }
@@ -146,7 +146,7 @@ function buildPacket(observation) {
   packet += time.getUTCDate().toString().padStart(2, '0') +
             time.getUTCHours().toString().padStart(2, '0') +
             time.getUTCMinutes().toString().padStart(2, '0');
-  
+
   if (lat < 0) {
     lat = Math.abs(lat);
     lat = Math.floor(lat).toString().padStart(2, '0') + (Math.floor(60 * parseFloat(lat % 1)*100)/100).toFixed(2).toString().padStart(5, '0') + 'S';
@@ -176,7 +176,7 @@ function buildPacket(observation) {
   } else {
     packet += 't...';
   }
-  
+
   // optional readings
   if (rainhour != null) {
     packet += 'r' + Math.min(999, Math.round(rainhour * 100)).toString().padStart(3, '0');
@@ -270,7 +270,7 @@ function validatePacket(packet) {
   if (now.getTime() - packetTimestamp.getTime() > 5 * 60 * 1000) {
     return new Response('Timestamp in packet is not within last 5 minutes', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
-  
+
   // check latlong — this CWOP feed accepts only uncompressed, full-precision coordinates;
   // spec-legal compressed positions and position-ambiguity spaces are intentionally not supported
   const latLongPattern = /(\d{2})(\d{2})\.\d{2}[NS]\/(\d{3})(\d{2})\.\d{2}[EW]/;
@@ -279,7 +279,7 @@ function validatePacket(packet) {
   if (!latlongmatch) {
     return new Response('Unsupported or invalid location data in packet (expected uncompressed ddmm.hhN/dddmm.hhW)', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
-  
+
   let latDegrees = parseInt(latlongmatch[1]);
   let latMinutes = parseInt(latlongmatch[2]);
   let lonDegrees = parseInt(latlongmatch[3]);
@@ -370,7 +370,7 @@ export async function sendPacket(packet, server, port, validationCode = '-1') {
   const writer = socket.writable.getWriter();
   const reader = socket.readable.getReader();
   const encoder = new TextEncoder();
-  
+
   // wait for server's initial message - http://www.wxqa.com/faq.html
   let initialMessage = await reader.read();
   console.log('Received from server: ', new TextDecoder().decode(initialMessage.value));
@@ -408,7 +408,7 @@ export async function sendPacket(packet, server, port, validationCode = '-1') {
   console.log('Received from server: ', serverResponse);
 
   console.log('Closing connection to ' + server + ':' + port);
-  
+
   return new Response(serverResponse, { "headers": { "Content-Type": "text/plain" } });
 
 }
