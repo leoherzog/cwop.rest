@@ -47,7 +47,7 @@ export async function handleRequest(request) {
     }
 
     if (body.packet) {  // default to provided packet, if any
-      packet = body.packet.trim().replace(/\s+$/, '');
+      packet = body.packet.replace(/^\s+/, '').replace(/[\r\n]+$/, ''); // keep spec-significant trailing spaces, drop only the line terminator
     } else if (body.time && body.id && body.lat && body.long && body.tempf != null) {  // otherwise, check for required params to build our own
       packet = buildPacket(body);
     } else {
