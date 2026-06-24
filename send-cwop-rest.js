@@ -212,7 +212,8 @@ function buildPacket(observation) {
 
 function validatePacket(packet) {
 
-  // a few basic sanity checks
+  // a few basic sanity checks; 53 is a heuristic floor derived from our fixed header plus
+  // the mandatory timestamp/position/wind/temp fields, not a spec-defined minimum
   if (!packet || typeof packet !== 'string' || packet.length < 53) {
     return new Response('Invalid or missing packet', { "status": 400 }); // HTTP 400 Bad Request
   }
