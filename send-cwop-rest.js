@@ -11,7 +11,6 @@ export default {
   }
 }
 
-// incoming request
 export async function handleRequest(request) {
 
   let packet, validationCode, manuallySpecifiedServer;
@@ -57,7 +56,7 @@ export async function handleRequest(request) {
     validationCode = body.validation;
     manuallySpecifiedServer = body.server;
     
-  } else {  // we need either a provided packet or required readings to make our own
+  } else {
     return new Response('Invalid request method', { "status": 405 });  // HTTP 405 Method Not Allowed
   }
 
@@ -82,7 +81,6 @@ export async function handleRequest(request) {
 
   await cache.put(cacheKey, new Response(Date.now().toString()));
 
-  // attempting to send...
   let server = 'cwop.aprs.net';
   if (validationCode) server = 'rotate.aprs.net'; // http://www.wxqa.com/servers2use.html
   if (manuallySpecifiedServer) server = manuallySpecifiedServer;
@@ -218,7 +216,6 @@ function validatePacket(packet) {
     return new Response('Invalid or missing packet', { "status": 400 }); // HTTP 400 Bad Request
   }
 
-  // confirm header is uppercase
   let header = packet.split('>')[0];
   if (header !== header.toUpperCase()) {
     return new Response('Packet header must be all uppercase', { "status": 422 }); // HTTP 422 Unprocessable Content
@@ -231,7 +228,6 @@ function validatePacket(packet) {
     return new Response('Malformed packet (missing @, z or _)', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
 
-  // check timestamp pattern
   const timePattern = /^(0[1-9]|[12][0-9]|3[01])([01][0-9]|2[0-3])[0-5][0-9]$/;
   let time = packet.substring(packet.indexOf('@') + 1, packet.lastIndexOf('z'));
   if (!timePattern.test(time)) {
@@ -284,7 +280,6 @@ function validatePacket(packet) {
     return new Response('Unsupported or invalid location data in packet (expected uncompressed ddmm.hhN/dddmm.hhW)', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
   
-  // check latlong values validity
   let latDegrees = parseInt(latlongmatch[1]);
   let latMinutes = parseInt(latlongmatch[2]);
   let lonDegrees = parseInt(latlongmatch[3]);
