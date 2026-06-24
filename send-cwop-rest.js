@@ -354,13 +354,11 @@ function validatePacket(packet) {
     return new Response('Invalid barometer token', { status: 422 });
   }
 
-  // solar-radiation token L/l### must be 0–999
-  let lIdx = packet.search(/[lL]\d{3}/); // first l/L followed by 3 digits
-  if (lIdx !== -1) {
-    let sr = Number(packet.substr(lIdx + 1, 3));
-    if (sr > 999) {
-      return new Response('Invalid solar radiation in packet', { status: 422 });
-    }
+  // solar-radiation token L### (0–999 W/m²) or l### (≥1000); matched only within the
+  // weather data so an l/L in the callsign or comment can't be misread as a reading
+  let lMatch = wx.match(/[lL](\d{3})/);
+  if (lMatch && Number(lMatch[1]) > 999) {
+    return new Response('Invalid solar radiation in packet', { status: 422 });
   }
 
   return true;
