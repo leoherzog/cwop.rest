@@ -190,7 +190,8 @@ function buildPacket(observation) {
     packet += 'p' + Math.min(999, Math.round(rainlast24hr * 100)).toString().padStart(3, '0');
   }
   if (humidity != null) {
-    packet += 'h' + Math.round(humidity % 100).toString().padStart(2, '0');
+    let h = Math.min(100, Math.max(1, Math.round(humidity))); // clamp to 1-100; spec encodes 100% as "00"
+    packet += 'h' + (h === 100 ? '00' : h.toString().padStart(2, '0'));
   }
   if (pressure != null) { // "altimeter" (QNH) format, in tenths of millibars
     packet += 'b' + Math.min(99999, Math.round(pressure * 10)).toString().padStart(5, '0');
