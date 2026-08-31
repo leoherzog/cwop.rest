@@ -226,14 +226,16 @@ function validatePacket(packet) {
   if (dtiIdx === 0 || (dti !== '/' && dti !== '@')) { // timestamped position DTIs: '/' = no APRS messaging, '@' = messaging-capable
     return new Response('Malformed packet (expected / or @ data type identifier after header)', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
-  const zIdx = packet.indexOf('z', dtiIdx); // date-time terminator
-  const uIdx = packet.indexOf('_', zIdx); // underscore before wind dir
-  if (zIdx < 0 || uIdx < 0) {
-    return new Response('Malformed packet (missing z or _)', { "status": 422 }); // HTTP 422 Unprocessable Content
+  // Complete Weather Report fields sit at fixed offsets after the DTI:
+  // DDHHMM 'z' (7) + latitude (8) + symbol table ID (1) + longitude (9) + '_' symbol code
+  const zIdx = dtiIdx + 7; // date-time terminator
+  const uIdx = zIdx + 19; // weather symbol code, directly before wind dir
+  if (packet[zIdx] !== 'z' || packet[uIdx] !== '_') {
+    return new Response('Malformed packet (expected DDHHMMz timestamp and ddmm.hhN/dddmm.hhW_ position at fixed offsets)', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
 
   const timePattern = /^(0[1-9]|[12][0-9]|3[01])([01][0-9]|2[0-3])[0-5][0-9]$/;
-  let time = packet.substring(dtiIdx + 1, packet.lastIndexOf('z'));
+  let time = packet.substring(dtiIdx + 1, zIdx);
   if (!timePattern.test(time)) {
     return new Response('Invalid time in packet', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
@@ -275,10 +277,11 @@ function validatePacket(packet) {
     return new Response('Timestamp in packet is not within last 5 minutes', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
 
-  // check latlong — this CWOP feed accepts only uncompressed, full-precision coordinates;
-  // spec-legal compressed positions and position-ambiguity spaces are intentionally not supported
-  const latLongPattern = /(\d{2})(\d{2})\.\d{2}[NS]\/(\d{3})(\d{2})\.\d{2}[EW]/;
-  let latlong = packet.substring(packet.indexOf('z') + 1, packet.lastIndexOf('_'));
+  // check for full-precision lat/long in the primary symbol table ('/');
+  // spec-legal compressed positions and
+  // position-ambiguity spaces are intentionally not supported
+  const latLongPattern = /^(\d{2})(\d{2})\.\d{2}[NS]\/(\d{3})(\d{2})\.\d{2}[EW]$/;
+  let latlong = packet.substring(zIdx + 1, uIdx);
   let latlongmatch = latlong.match(latLongPattern);
   if (!latlongmatch) {
     return new Response('Unsupported or invalid location data in packet (expected uncompressed ddmm.hhN/dddmm.hhW)', { "status": 422 }); // HTTP 422 Unprocessable Content
@@ -300,23 +303,7 @@ function validatePacket(packet) {
     return new Response('Invalid longitude in packet', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
 
-  // temperature is mandatory (spec: timestamp, wind dir/speed/gust and temperature must always be present)
-  let tIdx = packet.indexOf('t', uIdx); // first 't' after winds
-  if (tIdx === -1 || tIdx + 4 > packet.length) {
-    return new Response('Missing temperature in packet', { "status": 422 }); // HTTP 422 Unprocessable Content
-  }
-  let tStr = packet.substring(tIdx + 1, tIdx + 4); // '...', '075', '-12'
-  if (tStr !== '...') {
-    if (!/^-?\d{2,3}$/.test(tStr)) {
-      return new Response('Invalid temperature', { status: 422 });
-    }
-    let tVal = Number(tStr);
-    if (tVal < -99 || tVal > 999) {
-      return new Response('Temperature out of range', { status: 422 });
-    }
-  }
-
-  // wind dir / speed / gust live in fixed positions after the symbol code: _ddd/sssgNNN
+  // wind dir / speed / gust live in fixed positions after the symbol code: _ddd/sssgddd
   if (packet[uIdx + 4] !== '/' || packet[uIdx + 8] !== 'g') {
     return new Response('Malformed wind data in packet', { status: 422 }); // HTTP 422 Unprocessable Content
   }
@@ -338,7 +325,23 @@ function validatePacket(packet) {
     return new Response('Invalid wind speed/gust in packet', { status: 422 });
   }
 
-  // Optional tokens are matched with their exact digit counts and only within the
+  // temperature is mandatory and must immediately follow the gust field: _ddd/sssgdddt###
+  let tIdx = uIdx + 12;
+  if (packet[tIdx] !== 't' || tIdx + 4 > packet.length) {
+    return new Response('Missing temperature in packet', { "status": 422 }); // HTTP 422 Unprocessable Content
+  }
+  let tStr = packet.substring(tIdx + 1, tIdx + 4); // '...', '075', '-12'
+  if (tStr !== '...') {
+    if (!/^-?\d{2,3}$/.test(tStr)) {
+      return new Response('Invalid temperature', { status: 422 });
+    }
+    let tVal = Number(tStr);
+    if (tVal < -99 || tVal > 999) {
+      return new Response('Temperature out of range', { status: 422 });
+    }
+  }
+
+  // optional tokens are matched with their exact digit counts and only within the
   // weather data, so the trailing software/unit code (e.g. ...b09900wRSW, where the
   // unit may itself contain r/p/h/b) can't be mistaken for a reading.
   const wx = packet.slice(uIdx);
