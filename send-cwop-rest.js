@@ -141,7 +141,7 @@ function buildPacket(observation) {
     if (observation.solarradiation) solarradiation = Number(observation.solarradiation);
   }
 
-  let packet = id + '>APREST,TCPIP*:@';
+  let packet = id + '>APREST,TCPIP*:/';
 
   packet += time.getUTCDate().toString().padStart(2, '0') +
             time.getUTCHours().toString().padStart(2, '0') +
@@ -221,15 +221,19 @@ function validatePacket(packet) {
     return new Response('Packet header must be all uppercase', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
 
-  const atIdx = packet.indexOf('@'); // timestamp marker
-  const zIdx = packet.indexOf('z', atIdx); // date-time terminator
+  const dtiIdx = packet.indexOf(':') + 1; // data type identifier is the first character after the header
+  const dti = packet[dtiIdx];
+  if (dtiIdx === 0 || (dti !== '/' && dti !== '@')) { // timestamped position DTIs: '/' = no APRS messaging, '@' = messaging-capable
+    return new Response('Malformed packet (expected / or @ data type identifier after header)', { "status": 422 }); // HTTP 422 Unprocessable Content
+  }
+  const zIdx = packet.indexOf('z', dtiIdx); // date-time terminator
   const uIdx = packet.indexOf('_', zIdx); // underscore before wind dir
-  if (atIdx < 0 || zIdx < 0 || uIdx < 0) {
-    return new Response('Malformed packet (missing @, z or _)', { "status": 422 }); // HTTP 422 Unprocessable Content
+  if (zIdx < 0 || uIdx < 0) {
+    return new Response('Malformed packet (missing z or _)', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
 
   const timePattern = /^(0[1-9]|[12][0-9]|3[01])([01][0-9]|2[0-3])[0-5][0-9]$/;
-  let time = packet.substring(packet.indexOf('@') + 1, packet.lastIndexOf('z'));
+  let time = packet.substring(dtiIdx + 1, packet.lastIndexOf('z'));
   if (!timePattern.test(time)) {
     return new Response('Invalid time in packet', { "status": 422 }); // HTTP 422 Unprocessable Content
   }
